@@ -116,7 +116,7 @@ app.post("/effettuaIscrizione",(req,res)=>{
             res.status(404).json(studentegiaiscritto);
         }else{
             //No, è possibile effettuare l'iscrizione
-            var newStudente = new Studente({matricola: N46000001,nome: Miriana,cognome: Rossi, codicefiscale: QPSRVS47A11B207P, datanascita: 06/07/2001, classe: IVB});
+            var newStudente = new Studente({matricola: req.body.matricola,nome: req.body.nome,cognome: req.body.cognome, codicefiscale: req.body.codicefiscale, datanascita: req.body.datanascita, classe: req.body.classe});
             
             console.log("Iscrizione inviata! \n La tua iscrizione: \n"+newStudente);
             newStudente.save().then(()=>{
