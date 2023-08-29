@@ -2,8 +2,6 @@
 var http = require("http")
 var express = require("express")
 var mongoose = require("mongoose")
-const exp = require("constants")
-const { ok } = require("assert")
 var app = express() //Crea un'applicazione Express
 
 //Configurazione middleware
