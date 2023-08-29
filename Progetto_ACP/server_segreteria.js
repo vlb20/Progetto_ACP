@@ -1,7 +1,8 @@
 /*Variabili per l'utilizzo dei moduli node*/
 var http = require("http")
 var express = require("express")
-var mongoose = require("mongoose")
+var mongoose = require("mongoose");
+const { stat } = require("fs/promises");
 var app = express() //Crea un'applicazione Express
 
 //Configurazione middleware
@@ -42,6 +43,11 @@ var attivitaScheme = mongoose.Schema({
     idatt: Number,
     classe: String,
     data: String,
+    tipo: {
+        type:[String],
+        enum:["ISTITUTO","CLASSE"],
+        default: 'ISTITUTO'
+    },
     descrizione: String
 })
 
@@ -58,3 +64,152 @@ var Studente = studenti.model("Studente", studentiScheme);
 var Pagella = pagelle.model("Pagella", pagelleScheme);
 var Attivita = attivita.model("Attivita", attivitaScheme);
 var Materia = materie.model("Materia", materieScheme);
+
+
+//Contatore attività
+var idattivita=0;
+
+Attivita.find({},(err,result)=>{
+    var max=-1;
+    result.forEach((element)=>{
+        if(element.idatt>max){
+            max=element.idatt;
+        }
+    });
+    idattivita=max;
+})
+
+//Connessione
+http.createServer(app).listen(4002);
+
+//GESTIONE PAGELLE
+//TODO
+
+//POST: Inserisci pagella
+app.post("/inserisciPagella",(req,res)=>{
+
+    //TODO:Creazione pagella
+    var newpag = new Pagella();
+
+    //Salvataggio pagella
+    newpag.save().then(()=>{
+        res.status(200).json(newpag);
+    })
+
+});
+
+//GET: Visualizza pagelle
+app.get("/getPagelle",(req,res)=>{
+
+    //Raccogliamo le attività
+    Pagella.find({}).then((risp)=>{
+        if(risp.length!=0){
+            res.status(200).json(risp);
+        }else{
+            res.status(404).json(risp);
+        }
+    })
+});
+
+
+
+//GESTIONE ATTIVITà
+
+//POST: Inserisci attività
+app.post("/inserisciAttivita",(req,res)=>{
+
+    //Creazione attività
+    var newatt = new Attivita({idatt:Number(++idnews),classe:req.body.classe,data:req.body.data,tipo:req.body.tipo,descrizione=req.body.descrizione});
+
+    newatt.save().then(()=>{
+        res.status(200).json(newatt);
+    })
+
+});
+
+//GET: Visualizza attività
+app.get("/getAttivita",(req,res)=>{
+
+    //Raccogliamo le attività
+    Attivita.find({}).then((risp)=>{
+        if(risp.length!=0){
+            res.status(200).json(risp);
+        }else{
+            res.status(404).json(risp);
+        }
+    })
+});
+
+//DELETE: Elimina attività
+app.delete("/deleteAttivita",(req,res)=>{
+
+    //Cerchiamo l'attività da eliminare
+    Attivita.findOneAndDelete(req.body).then((cancella)=>{
+        //cancella ha funzionato?
+        if(cancella!=null){
+            //Sì,ack
+            res.status(200).json(risp);
+        }else{
+            //No.errore
+            res.status(404).json(risp);
+        }
+    })
+});
+
+//GESTIONE STUDENTI
+
+//GET: Visualizza studenti
+app.get("/getStudenti",(req,res)=>{
+
+    //Raccolgo le iscrizioni dal database
+    Studente.find({}).then((iscrizioni)=>{
+
+        //Ci sono delle iscrizioni?
+        if(iscrizioni.length!=0){
+
+            //Sì,do un ack
+            res.status(200).json(iscrizioni);
+        }else{
+
+            //No,errore
+            res.status(404).json(iscrizioni);
+        }
+    })
+})
+
+//GET: Visualizza studenti in base allo stato
+app.get("/getStudenti/:status",(req,res)=>{
+
+    //Raccolgo gli studenti con quello status
+    Studente.find({"stato":req.params.status.toString().toUpperCase()}).then((statostudenti)=>{
+        
+        //Ci sono studenti con questo stato?
+        if(statostudenti.length!=0){
+            
+            //Sì,do un ack
+            res.status(200).json(statostudenti);
+        }else{
+            
+            //No,errore
+            res.status(404).json(statostudenti);
+        }
+    })
+})
+
+//PUT: Approva Iscrizione
+app.put("/approvaIscrizione",(req,res)=>{
+
+    //Cerchiamo la prenotazione nel database 
+    Studente.findOneAndUpdate({"matricola":req.body.matricola},{"stato":"ASSEGNATO"},(approvazione)=>{
+        res.status(200).json(req.body);
+    })
+})
+
+//PUT: Rigetta Iscrizione
+app.put("/rigettaIscrizione",(req,res)=>{
+
+    //Cerchiamo la prenotazione nel database 
+    Studente.findOneAndUpdate({"matricola":req.body.matricola},{"stato":"NON ASSEGNATO"},(approvazione)=>{
+        res.status(200).json(req.body);
+    })
+})
