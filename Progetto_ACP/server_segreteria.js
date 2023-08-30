@@ -13,6 +13,7 @@ app.use(express.static(__dirname+"/root_admin")) //Setta la root di base alla di
 const studenti = mongoose.createConnection("mongodb://127.0.0.1:27017/Studenti") //Creo la connessione per l'istanza del database Studenti
 const pagelle = mongoose.createConnection("mongodb://127.0.0.1:27017/Pagelle") //Creo la connessione per l'istanza del database Pagelle
 const attivita = mongoose.createConnection("mongodb://127.0.0.1:27017/Attivita") //Creo la connessione per l'istanza del database Attività
+const materie = mongoose.createConnection("mongodb://127.0.0.1:27017/Materia") //Creo la connessione per l'istanza del database Materie
 
 //Definizione schema Mongoose per gli studenti
 var studentiScheme = mongoose.Schema({//Uno studente ha un id, un n
@@ -70,28 +71,33 @@ var Materia = materie.model("Materia", materieScheme);
 var idattivita=0;
 var idpagella=0;
 
-Attivita.find({},(err,result)=>{
-    var max=-1;
-    result.forEach((element)=>{
-        if(element.idatt>max){
-            max=element.idatt;
-        }
+Attivita.find({}).then((result) => {
+    var max = -1;
+    result.forEach((element) => {
+        if (element.idatt > max) {
+        max = element.idatt;
+    }
     });
-    idattivita=max;
-})
+    idattivita = max;
+}).catch((err) => {
+    console.error(err);
+});
 
-Pagella.find({},(err,result)=>{
-    var max=-1;
-    result.forEach((element)=>{
-        if(element.id>max){
-            max=element.id;
+Pagella.find({}).then((result) => {
+    var max = -1;
+    result.forEach((element) => {
+        if (element.id > max) {
+        max = element.id;
         }
     });
-    idpagella=max;
-})
+    idpagella = max;
+}).catch((err) => {
+    console.error(err);
+});
+
 
 //Connessione
-http.createServer(app).listen(4002);
+http.createServer(app).listen(4006);
 
 //GESTIONE PAGELLE
 
