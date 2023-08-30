@@ -68,6 +68,7 @@ var Materia = materie.model("Materia", materieScheme);
 
 //Contatore attività
 var idattivita=0;
+var idpagella=0;
 
 Attivita.find({},(err,result)=>{
     var max=-1;
@@ -79,17 +80,31 @@ Attivita.find({},(err,result)=>{
     idattivita=max;
 })
 
+Pagella.find({},(err,result)=>{
+    var max=-1;
+    result.forEach((element)=>{
+        if(element.id>max){
+            max=element.id;
+        }
+    });
+    idpagella=max;
+})
+
 //Connessione
 http.createServer(app).listen(4002);
 
 //GESTIONE PAGELLE
-//TODO
 
 //POST: Inserisci pagella
 app.post("/inserisciPagella",(req,res)=>{
 
-    //TODO:Creazione pagella
-    var newpag = new Pagella();
+    //Creazione pagella
+    var newpag = new Pagella({id: Number, studente: req.body.studente,
+        quadrimestre: req.body.quadrimestre,
+        annoscolastico: req.body.annoscolastico,
+        materie: req.body.materie
+    });
+
 
     //Salvataggio pagella
     newpag.save().then(()=>{
@@ -119,7 +134,7 @@ app.get("/getPagelle",(req,res)=>{
 app.post("/inserisciAttivita",(req,res)=>{
 
     //Creazione attività
-    var newatt = new Attivita({idatt:Number(++idnews),classe:req.body.classe,data:req.body.data,tipo:req.body.tipo,descrizione=req.body.descrizione});
+    var newatt = new Attivita({idatt:Number(++idnews),classe:req.body.classe,data:req.body.data,tipo:req.body.tipo,descrizione:req.body.descrizione});
 
     newatt.save().then(()=>{
         res.status(200).json(newatt);
