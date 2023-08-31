@@ -19,7 +19,7 @@ La **segreteria** può accettare o rigettare le _iscrizioni_ e poi visualizzarle
 
 ## AVVIO DELL'APPLICAZIONE
 
-1.Avviare il servizio **mongodb**
+1.Avviare il servizio **mongodb**\
 2.Eseguire nella directory del progetto i seguenti comandi:
 
 > **npm run starts** -- Avvia la vista della **segreteria** sul localhost:4002\
