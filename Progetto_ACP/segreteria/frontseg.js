@@ -100,7 +100,7 @@ var main = function(){
                     })
 
                 }).fail((jqXHR)=>{
-                    $cont.append($("<li class='error'>").text("Nessuna iscrizioni da gestire!")).hide().fadeIn(800);
+                    $cont.append($("<li class='error'>").text("Nessuna iscrizione da gestire!")).hide().fadeIn(800);
                 })
 
                 //Append della nostra variabile al content
