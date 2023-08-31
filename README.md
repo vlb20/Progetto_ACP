@@ -2,7 +2,7 @@
 
 # Studenti:
 ## Vincenzo Luigi Bruno N46005698
-## Francesco Brunello N46005492
+## Cristina Carleo N46005492
 
 Web Application per la gestione di un Istituto Scolastico<br>
 
