@@ -8,7 +8,7 @@ var main = function(){
     //Dichiaro una variabile che mi servirà per l'append del content
     var $cont;
 
-    //Trasformo i tabs in un array e li scoro
+    //Trasformo i tabs in un array e li scorro
 
     $(".tabs a span").toArray().forEach((element)=>{
 
@@ -59,7 +59,7 @@ var main = function(){
                                 
                                 //Chiamata Ajax - PUT
                                 $.ajax({
-                                    url:"approvaIscrizione",
+                                    url:"assegnaIscrizione",
                                     type:"PUT",
                                     dataType:"json",
                                     data:el

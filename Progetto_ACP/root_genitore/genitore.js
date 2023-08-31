@@ -69,7 +69,7 @@ var main=function(){
                             url: "/effettuaIscrizione",
                             type:"POST",
                             dataType:"json",
-                            data:element
+                            data:stud
                         }).done(function(){
                             //Inserimento avvenuto con successo
                             $("p.notify").text("Iscrizione effettuata").hide().fadeIn(800).fadeOut(3000);
@@ -89,7 +89,7 @@ var main=function(){
                     }
                 });
 
-                 $inputmatricola.on("keypress",function(event){
+                $inputmatricola.on("keypress",function(event){
                     if(event.key=="Enter")
                     $inputnome.focus();
                 });

@@ -216,19 +216,32 @@ app.get("/getStudenti/:status",(req,res)=>{
 })
 
 //PUT: Approva Iscrizione
-app.put("/approvaIscrizione",(req,res)=>{
-
-    //Cerchiamo la prenotazione nel database 
-    Studente.findOneAndUpdate({"matricola":req.body.matricola},{"stato":"ASSEGNATO"},(approvazione)=>{
+app.put("/assegnaIscrizione", (req, res) => {
+    Studente.findOneAndUpdate(
+        { "matricola": req.body.matricola },
+        { "stato": "ASSEGNATO" }
+    )
+    .then(() => {
         res.status(200).json(req.body);
     })
-})
+    .catch(error => {
+        console.error(error);
+        res.status(500).json({ error: "An error occurred" });
+    });
+});
+
 
 //PUT: Rigetta Iscrizione
-app.put("/rigettaIscrizione",(req,res)=>{
-
-    //Cerchiamo la prenotazione nel database 
-    Studente.findOneAndUpdate({"matricola":req.body.matricola},{"stato":"NON ASSEGNATO"},(approvazione)=>{
+app.put("/rigettaIscrizione", (req, res) => {
+    Studente.findOneAndUpdate(
+        { "matricola": req.body.matricola },
+        { "stato": "RIGETTATO" }
+    )
+    .then(() => {
         res.status(200).json(req.body);
     })
-})
+    .catch(error => {
+        console.error(error);
+        res.status(500).json({ error: "An error occurred" });
+    });
+});
