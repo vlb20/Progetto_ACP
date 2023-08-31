@@ -12,7 +12,7 @@ app.use(express.static(__dirname+"/root_genitore")) //Setta la root di base alla
 const studenti = mongoose.createConnection("mongodb://127.0.0.1:27017/Studenti") //Creo la connessione per l'istanza del database Studenti
 const pagelle = mongoose.createConnection("mongodb://127.0.0.1:27017/Pagelle") //Creo la connessione per l'istanza del database Pagelle
 const attivita = mongoose.createConnection("mongodb://127.0.0.1:27017/Attivita") //Creo la connessione per l'istanza del database Attività
-const materie = mongoose.createConnection("mongodb://127.0.0.1:27017/Materie") //Creo la connessione per l'istanza del database Attività
+const materie = mongoose.createConnection("mongodb://127.0.0.1:27017/Materia") //Creo la connessione per l'istanza del database Attività
 
 
 //Definizione schema Mongoose per gli studenti
