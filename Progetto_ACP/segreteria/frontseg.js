@@ -66,10 +66,10 @@ var main = function(){
                                 }).done(()=>{
                                     //Se tutto va bene -> refresh della pagina triggerando fittiziamente il click
                                     $(".tabs a:nth-child(1) span").trigger("click");
-                                    $(".notify").text("Iscrizione gestita con successo!").hide().fadeIn(1500).fadeOut(2000);
+                                    $(".notify").text("Iscrizione gestita con successo!").hide().fadeIn(800).fadeOut(3000);
                                 }).fail(()=>{
                                     //In caso di fallimento
-                                    $(".notify").text("Operazione di gestione dell'iscrizione non andata a buon fine!").hide().fadeIn(1500).fadeOut(2000);
+                                    $(".notify").text("Operazione di gestione dell'iscrizione non andata a buon fine!").hide().fadeIn(800).fadeOut(3000);
                                 })
 
                             }//Se si tratta del bottone 'rifiuta' -> PUT cambiando lo stato in NON ASSEGNATO
@@ -87,10 +87,10 @@ var main = function(){
                                 }).done(()=>{
                                     //Se tutto va bene -> refresh della pagina triggerando fittiziamente il click
                                     $(".tabs a:nth-child(1) span").trigger("click");
-                                    $(".notify").text("Iscrizione gestita con successo!").hide().fadeIn(1500).fadeOut(2000);
+                                    $(".notify").text("Iscrizione gestita con successo!").hide().fadeIn(800).fadeOut(3000);
                                 }).fail(()=>{
                                     //In caso di fallimento
-                                    $(".notify").text("Operazione di gestione dell'iscrizione non andata a buon fine!").hide().fadeIn(1500).fadeOut(2000);
+                                    $(".notify").text("Operazione di gestione dell'iscrizione non andata a buon fine!").hide().fadeIn(800).fadeOut(3000);
                                 })
 
                             }
@@ -100,7 +100,7 @@ var main = function(){
                     })
 
                 }).fail((jqXHR)=>{
-                    $cont.append($("<li class='error'>").text("Nessuna iscrizioni da gestire!")).hide().fadeIn(1500);
+                    $cont.append($("<li class='error'>").text("Nessuna iscrizioni da gestire!")).hide().fadeIn(800);
                 })
 
                 //Append della nostra variabile al content
@@ -150,7 +150,7 @@ var main = function(){
                     //Se la ricerca non trova nulla scrivo un messaggio di errore
                     if(assegnfound==false && rifutfound==false){
                         console.log("non trovato");
-                        $cont.append($("<li class='error'>").text("Nessun studente trovato")).hide().fadeIn(1500);
+                        $cont.append($("<li class='error'>").text("Nessun studente trovato")).hide().fadeIn(800);
                     }
                 })
 
@@ -166,7 +166,7 @@ var main = function(){
                 var $labelmatricola=$("<p class='labeltext'>").text("Matricola");
                 var $inputmatricola = $("<input class='inputpagelle' placeholder='Inserisci la matricola dello studente...'>");
                 
-                var $selquad = $("<select class='selezione' name='choice'> <option value='PRIMO QUADRIMESTRE'>Primo</option> <option value='SECONDO QUADRIMESTRE' selected>Secondo</option> </select>");
+                var $selquad = $("<select class='selezione' name='choice'> <option value='PRIMO QUADRIMESTRE'>Primo Quadrimestre</option> <option value='SECONDO QUADRIMESTRE' selected>Secondo Quadrimestre</option> </select>");
 
                 var $labelanno=$("<p class='labeltext'>").text("Anno Scolastico");
                 var $inputanno = $("<input class='inputpagelle' placeholder='Inserisci Anno Scolastico...'>");
@@ -199,7 +199,7 @@ var main = function(){
                             data:el
                         }).done(()=>{
                             //Messaggio di successo per l'inserimento
-                            $("p.notify").text("Quadro inserito con successo!").hide().fadeIn(1500).fadeOut(2000);
+                            $("p.notify").text("Quadro inserito con successo!").hide().fadeIn(800).fadeOut(3000);
                             //Clear input
                             $inputmatricola.val("");
                             $inputanno.val("");
@@ -212,7 +212,7 @@ var main = function(){
                     }
                     //Se non sono stati compilati tutti i campi
                     else{
-                        $("p.notify").text("Compila tutti i campi!").hide().fadeIn(1500).fadeOut(2000);
+                        $("p.notify").text("Compila tutti i campi!").hide().fadeIn(800).fadeOut(3000);
                     }
 
                 });
@@ -275,7 +275,7 @@ var main = function(){
 
                     pagelle.forEach((pagella)=>{
 
-                        var $listidpagelle = $("<li class='listidprenotazione'>").text("ID: "+pagella.id);
+                        var $listidpagelle = $("<li class='listidpagella'>").text("ID Pagella: "+pagella.id);
                         var $infopagella = $("<li class='infopagella'>").text("Matricola: "+pagella.studente.matricola+" - "+pagella.quadrimestre+" quadrimestre - Anno scolastico: "+pagella.annoscolastico);
                         var $votoita = $("<li class='listvotoita'>").text("Italiano: "+pagella.materie.votoitaliano);
                         var $votomat = $("<li class='listvotomat'>").text("Matematica: "+pagella.materie.votomatematica);
@@ -325,14 +325,14 @@ var main = function(){
                             data:el
                         }).done(()=>{
                             //Messaggio di pubblicazione avvenuta
-                            $("p.notify").text("Attività pubblicata!").hide().fadeIn(1500).fadeOut(2000);
+                            $("p.notify").text("Attività pubblicata!").hide().fadeIn(800).fadeOut(3000);
                             //Clear degli inputbox
                             $inputdata.val("");
                             $tbox.val("");
                         })
 
                     }else{//Se non sono stati compilati tutti i campi
-                        $("p.notify").text("Compila tutti i campi!").hide().fadeIn(1500).fadeOut(2000);
+                        $("p.notify").text("Compila tutti i campi!").hide().fadeIn(800).fadeOut(3000);
                     }
 
                 });
@@ -361,7 +361,7 @@ var main = function(){
                 $("main .content").append($cont);
 
             }else if($(element).parent().is(":nth-child(6)")){
-                //VISUALIZZA ATTIVITA' - La segreteria visualizza tutte le attività pubblicate e può eliminarle
+                //GESTISCI ATTIVITA' - La segreteria visualizza tutte le attività pubblicate e può eliminarle
 
                 $cont=$("<ul>");
 
@@ -405,10 +405,10 @@ var main = function(){
                             }).done(()=>{
                                 //Se l'operazione va a buon fine refresho la paggina e manndo un messaggio di successo
                                 $(".tabs a:nth-child(6) span").trigger("click");
-                                $(".notify").text("Attività eliminata con successo!").hide().fadeIn(1500).fadeOut(2000);
+                                $(".notify").text("Attività eliminata con successo!").hide().fadeIn(800).fadeOut(3000);
                             }).fail((jqXHR)=>{
                                 //Se fallisce mando un messaggio di errore
-                                $(".notify").text("Attività non eliminata!").hide().fadeIn(1500).fadeOut(2000);
+                                $(".notify").text("Attività non eliminata!").hide().fadeIn(800).fadeOut(3000);
                             })
 
                         });
@@ -417,7 +417,7 @@ var main = function(){
 
                 }).fail((jqXHR)=>{
                     //Fail nella ricerca delle attività -> messaggio di errore
-                    $cont.append($("<li class='error'>").text("Non sono state trovate attività!")).hide().fadeIn(1500).fadeOut(2000);
+                    $cont.append($("<li class='error'>").text("Non sono state trovate attività!")).hide().fadeIn(800).fadeOut(3000);
                 });
 
                 $("main .content").append($cont);
