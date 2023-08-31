@@ -3,11 +3,12 @@ var http = require("http")
 var express = require("express")
 var mongoose = require("mongoose");
 const { stat } = require("fs/promises");
+const { callbackify } = require("util");
 var app = express() //Crea un'applicazione Express
 
 //Configurazione middleware
 app.use(express.urlencoded({extended: true})); //Permette di ricevere i JSON come array o stringhe
-app.use(express.static(__dirname+"/root_admin")) //Setta la root di base alla directory specificata
+app.use(express.static(__dirname+"/segreteria")) //Setta la root di base alla directory specificata
 
 //Creazione databases MongoDB
 const studenti = mongoose.createConnection("mongodb://127.0.0.1:27017/Studenti") //Creo la connessione per l'istanza del database Studenti
@@ -25,16 +26,16 @@ var studentiScheme = mongoose.Schema({//Uno studente ha un id, un n
     classe: String,
     stato: {
         type: [String],
-        enum: ["ASSEGNATO", "NON ASSEGNATO", "IN ATTESA"],
-        default: 'IN ATTESA'
+        enum: ["ASSEGNATO", "RIGETTATO", "ATTESA"],
+        default: 'ATTESA'
     }
 })
 
 //Definizione schema Mongoose per le pagelle
 var pagelleScheme = mongoose.Schema({
     id: Number,
-    studente: {matricola: Number, nome: String, cognome: String},
-    quadrimestre: Number,
+    studente: {matricola: Number},
+    quadrimestre: String,
     annoscolastico: String,
     materie: {votoitaliano: Number, votomatematica: Number, votoinglese: Number, votostoria: Number}
 })
@@ -42,7 +43,6 @@ var pagelleScheme = mongoose.Schema({
 //Definizione schema Mongoose per le attività
 var attivitaScheme = mongoose.Schema({
     idatt: Number,
-    classe: String,
     data: String,
     tipo: {
         type:[String],
@@ -97,7 +97,7 @@ Pagella.find({}).then((result) => {
 
 
 //Connessione
-http.createServer(app).listen(4006);
+http.createServer(app).listen(4002);
 
 //GESTIONE PAGELLE
 
@@ -105,7 +105,7 @@ http.createServer(app).listen(4006);
 app.post("/inserisciPagella",(req,res)=>{
 
     //Creazione pagella
-    var newpag = new Pagella({id: Number, studente: req.body.studente,
+    var newpag = new Pagella({id:Number(++idpagella), studente: req.body.studente,
         quadrimestre: req.body.quadrimestre,
         annoscolastico: req.body.annoscolastico,
         materie: req.body.materie
@@ -132,15 +132,13 @@ app.get("/getPagelle",(req,res)=>{
     })
 });
 
-
-
 //GESTIONE ATTIVITà
 
 //POST: Inserisci attività
 app.post("/inserisciAttivita",(req,res)=>{
 
     //Creazione attività
-    var newatt = new Attivita({idatt:Number(++idnews),classe:req.body.classe,data:req.body.data,tipo:req.body.tipo,descrizione:req.body.descrizione});
+    var newatt = new Attivita({idatt:Number(++idattivita),classe:req.body.classe,data:req.body.data,tipo:req.body.tipo,descrizione:req.body.descrizione});
 
     newatt.save().then(()=>{
         res.status(200).json(newatt);
@@ -169,10 +167,10 @@ app.delete("/deleteAttivita",(req,res)=>{
         //cancella ha funzionato?
         if(cancella!=null){
             //Sì,ack
-            res.status(200).json(risp);
+            res.status(200).json(cancella);
         }else{
             //No.errore
-            res.status(404).json(risp);
+            res.status(404).json(cancella);
         }
     })
 });

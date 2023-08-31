@@ -1,3 +1,5 @@
+//Variabile globale che servirà per notificare una nuova iscrizione
+var num_iscrizioni=0;
 
 var main = function(){
 
@@ -25,7 +27,7 @@ var main = function(){
                 $cont = $("<ul>");
 
                 //GET Ajax all'url offerto da server_segreteria per la visualizzazione degli studenti in attesa dell'iscrizione
-                $.getJSON("/getStudenti/in attesa", (iscrizioni)=>{
+                $.getJSON("/getStudenti/attesa", (iscrizioni)=>{
 
                     //scorro l'array di iscrizioni
                     iscrizioni.forEach((iscrizione)=>{
@@ -130,7 +132,7 @@ var main = function(){
                 })
 
                 //GET Ajax all'url offerto da server_segreteria per l'ottenimento della lista degli studenti non assegnati
-                $.getJSON("/getStudenti/non assegnato", (studenti)=>{
+                $.getJSON("/getStudenti/rigettato", (studenti)=>{
 
                     var $labelstudrifiut = $("<ul class='labelstudentirifiutati'>").text("STUDENTI NON ASSEGNATI");
                     $cont.append($labelstudrifiut);
@@ -271,15 +273,208 @@ var main = function(){
                 //GET Ajax all'url offerto da server_segreteria per l'ottenimento della lista di quadri
                 $.getJSON("/getPagelle", (pagelle)=>{
 
-                    
-                        
-                })
-            }
-            
+                    pagelle.forEach((pagella)=>{
 
+                        var $listidpagelle = $("<li class='listidprenotazione'>").text("ID: "+pagella.id);
+                        var $infopagella = $("<li class='infopagella'>").text("Matricola: "+pagella.studente.matricola+" - "+pagella.quadrimestre+" quadrimestre - Anno scolastico: "+pagella.annoscolastico);
+                        var $votoita = $("<li class='listvotoita'>").text("Italiano: "+pagella.materie.votoitaliano);
+                        var $votomat = $("<li class='listvotomat'>").text("Matematica: "+pagella.materie.votomatematica);
+                        var $votoing = $("<li class='listvotoing'>").text("Inglese: "+pagella.materie.votoinglese);
+                        var $votosto = $("<li class='listvotosto'>").text("Storia: "+pagella.materie.votostoria);
+
+                        $cont.append($listidpagelle).append($infopagella).append($votoita).append($votomat).append($votoing).append($votosto);
+                    })
+                    
+                }).fail((jqXHR)=>{
+                    $cont.append($("<li class='error'>").text("Nessun quadro trovato!"));
+                })
+
+                //Append elementi html al content
+                $("main .content").append($cont);
+
+            }else if($(element).parent().is(":nth-child(5)")){
+                //INSERISCI ATTIVITA' - La segreteria pubblica le attività tramite questo tab
+
+                $cont = $("<div>");
+
+                //Label e input box html per riempire i vari campi
+                var $labeldata = $("<p class='labeltext'>").text("Data");
+                var $inputdata = $("<input class='calendar' type='date'>");
+
+                var $selezionetipo = $("<select class= 'selezione' name='choice'> <option value='ISTITUTO' selected>Istituto</option> <option value='CLASSE'>Classe</option> </select>");
+
+                var $labeldesc = $("<p class='labeltext'>").text("Descrizione");
+                var $tbox = $("<textarea class = 'textbox' placeholder='Inserisci descrizione attività...'>");
+
+                var $buttonattivita = $("<button class ='publish btn btn-outline-info'>").text("Pubblica");
+
+                //Aggiungo il listener al click del bottone
+                $buttonattivita.on("click", ()=>{
+
+                    //Controllo che siano stati compilati i vari campi
+                    if($inputdata.val()!="" && $tbox.val()!=""){
+
+                        //Creo l'oggetto attivita
+                        var el = {data: $inputdata.val(), tipo: $selezionetipo.val(), descrizione: $tbox.val()};
+
+                        //Chiamata AJAX - POST
+                        $.ajax({
+                            url: "/inserisciAttivita",
+                            type: "POST",
+                            dataType: "json",
+                            data:el
+                        }).done(()=>{
+                            //Messaggio di pubblicazione avvenuta
+                            $("p.notify").text("Attività pubblicata!").hide().fadeIn(1500).fadeOut(2000);
+                            //Clear degli inputbox
+                            $inputdata.val("");
+                            $tbox.val("");
+                        })
+
+                    }else{//Se non sono stati compilati tutti i campi
+                        $("p.notify").text("Compila tutti i campi!").hide().fadeIn(1500).fadeOut(2000);
+                    }
+
+                });
+
+                //Listener sul keypress per spostare il focus all'inserimento del campo successivo
+                $inputdata.on("keypress", (event)=>{
+                    if(event.key==="Enter"){
+                        $selezionetipo.focus();
+                    }
+                });
+
+                $selezionetipo.on("keypress", (event)=>{
+                    if(event.key==="Enter"){
+                        $tbox.focus();
+                    }
+                });
+
+                $tbox.on("keypress", (event)=>{
+                    if(event.key==="Enter"){
+                        $buttonattivita.focus();
+                    }
+                });
+
+                $cont.append($labeldata).append($inputdata).append($selezionetipo).append($labeldesc).append($tbox).append($buttonattivita);
+
+                $("main .content").append($cont);
+
+            }else if($(element).parent().is(":nth-child(6)")){
+                //VISUALIZZA ATTIVITA' - La segreteria visualizza tutte le attività pubblicate e può eliminarle
+
+                $cont=$("<ul>");
+
+                //GET per ottenere l'array di attività
+                $.getJSON("/getAttivita", (activities)=>{
+
+                    //Scorro l'array di attività
+                    activities.forEach((attivita)=>{
+
+                        //Bottone per l'eliminazione dell'attività, con dentro l'id univoco dell'attività da eliminare
+                        var $button = $("<button class='deleteactivity btn btn-outline-danger' id='"+attivita.idatt+"'>").text("Elimina");
+                        //div con display flex per lo spazio tra i bottoni
+                        var $div = $("<div class='d-flex gap-2'>")
+                        //Descrizione dell'attività
+                        var $actdesc = $("<li class='attivitadesc'>").text(attivita.descrizione);
+                        //Appendo il tipo della news per differenziarle e lo scrivo insieme alla data
+                        $cont.append($("<li class='"+attivita.tipo.toString().toLowerCase()+"'>").text(attivita.tipo+" "+attivita.data));
+
+                        //Appendo il resto degli elementi html
+                        $div.append($actdesc).append($button);
+                        $cont.append($div);
+
+                    });
+
+                    //Selezioni i bottoni di eliminazione
+                    document.querySelectorAll('button.deleteactivity').forEach((bottone)=>{
+
+                        //Listener del click del bottone
+                        bottone.addEventListener("click", (e)=>{
+
+                            //Oggetto in cui salvo l'id dell'attività da cancellare
+                            var el={idatt:e.target.getAttribute('id')}
+                            console.log(el);
+
+                            //DELETE Ajax
+                            $.ajax({
+                                url:"/deleteAttivita",
+                                type:"DELETE",
+                                dataType:"json",
+                                data:el
+                            }).done(()=>{
+                                //Se l'operazione va a buon fine refresho la paggina e manndo un messaggio di successo
+                                $(".tabs a:nth-child(6) span").trigger("click");
+                                $(".notify").text("Attività eliminata con successo!").hide().fadeIn(1500).fadeOut(2000);
+                            }).fail((jqXHR)=>{
+                                //Se fallisce mando un messaggio di errore
+                                $(".notify").text("Attività non eliminata!").hide().fadeIn(1500).fadeOut(2000);
+                            })
+
+                        });
+
+                    });
+
+                }).fail((jqXHR)=>{
+                    //Fail nella ricerca delle attività -> messaggio di errore
+                    $cont.append($("<li class='error'>").text("Non sono state trovate attività!")).hide().fadeIn(1500).fadeOut(2000);
+                });
+
+                $("main .content").append($cont);
+
+            }
+
+            return false; //Evita la ripropagazione del click sui tabs
 
         })
-    })
+
+    });
+
+    $(".tabs a:first-child span").trigger("click"); //Trigger per settare il tab di default (Gestisci Studenti) quando viene aperta la pagina
+
+}
+
+//Funzione per la notifica di una nuova iscrizione
+var check = function(firstcall){
+
+    //GET Ajax delle iscrizioni in attesa
+    $.getJSON("/getStudenti/attesa", (iscrizioni)=>{
+
+        //Se è la prima chiamata alla funzione, pongo il contatore di iscrizioni pari alla lunghezza dell'array di iscrizioni
+        if(firstcall){
+
+            num_iscrizioni=iscrizioni.length;
+
+        }else if(num_iscrizioni!=iscrizioni.length){
+
+            //Se il contatore è cambiato invio la notifica
+            num_iscrizioni=iscrizioni.length;
+            var el = document.querySelector(".active");
+
+            //Se mi trovo già sul primo tab triggero il click fittiziamente
+            if(el.getAttribute("id")=="gestiscistudentitab"){
+                $(el).trigger("click");
+                $(".alert").text("Nuova modifica alle iscrizioni");
+                $(".alert").on("click",()=>{
+                    $(".alert").text("");
+                })
+
+            }else{
+                //Se invece mi trovo su un'altro tab notifico la modifica
+                $(".alert").text("Aggiornate le richieste di iscrizione");
+                $(".alert").on("click", ()=>{
+
+                    $(".alert").text("");
+    
+
+                });
+
+            }
+
+        }
+
+    });
+
 }
 
 //Avvio del main e della funzione di notifica (passo alla prima call true)
