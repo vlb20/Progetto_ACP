@@ -89,35 +89,36 @@ var main=function(){
                     }
                 });
 
-                $inputmatricola.on("keypress",function(event){
+                 $inputmatricola.on("keypress",function(event){
                     if(event.key=="Enter")
-                        $selquad.focus();
+                    $inputnome.focus();
                 });
 
                 $inputnome.on("keypress",function(event){
                     if(event.key=="Enter")
-                        $selquad.focus();
+                    $inputcognome.focus();
                 });
 
                 $inputcognome.on("keypress",function(event){
                     if(event.key=="Enter")
-                        $selquad.focus();
+                    $inputcodicefiscale.focus();
                 });
 
                 $inputcodicefiscale.on("keypress",function(event){
                     if(event.key=="Enter")
-                        $selquad.focus();
+                    $inputdatanascita.focus();
                 });
 
                 $inputdatanascita.on("keypress",function(event){
                     if(event.key=="Enter")
-                        $selquad.focus();
+                    $inputclasse.focus();
                 });
 
                 $inputclasse.on("keypress",function(event){
                     if(event.key=="Enter")
-                        $selquad.focus();
+                        $buttoniscrizione.focus();
                 });
+
 
 
 
