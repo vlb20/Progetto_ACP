@@ -1,10 +1,11 @@
-# Progetto_ACP_WebApplication - Docente De Simone Luigi
+# Progetto ACP WebApplication: ``Learnopolis``
+# Docente: ``Luigi De Simone``
 
 # Studenti:
-## Vincenzo Luigi Bruno N46005698
-## Cristina Carleo N46005492
+## ``Vincenzo Luigi Bruno`` N46005698
+## ``Cristina Carleo`` N46005492
 
-Web Application per la gestione di un Istituto Scolastico<br>
+``Web Application per la gestione di un Istituto Scolastico``<br>
 
 Sono presenti una vista riguardante il genitore dell'alunno e una vista riguardante la segreteria dell'istituto scolastico<br><br>
 Un **genitore** può inviare la richiesta di iscrizione del proprio _figlio (studente)_, visualizzare i _quadri_ dell'istituto e visualizzare le _attività_ pubblicate dalla segreteria <br><br>
