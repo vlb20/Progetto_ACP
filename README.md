@@ -1,11 +1,14 @@
-# Progetto ACP WebApplication: ``Learnopolis``
-# Docente: ``Luigi De Simone``
+[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/LEtL4xxK)
+## Progetto: ``Learnopolis - Web Application per la gestione di un Istituto Scolastico``
 
-# Studenti:
-## ``Vincenzo Luigi Bruno`` N46005698
-## ``Cristina Carleo`` N46005492
+### NOME: ``VINCENZO LUIGI``
+### COGNOME: ``BRUNO``
+### MATRICOLA: ``N46005698``
+### ALTRI COMPONENTI GRUPPO: ``CRISTINA CARLEO N46005492``
 
-``Web Application per la gestione di un Istituto Scolastico``<br>
+### DOCENTE: ``DE SIMONE``
+
+## DESCRIZIONE
 
 Sono presenti una vista riguardante il genitore dell'alunno e una vista riguardante la segreteria dell'istituto scolastico<br><br>
 Un **genitore** può inviare la richiesta di iscrizione del proprio _figlio (studente)_, visualizzare i _quadri_ associati al proprio _studente_ e visualizzare le _attività_ pubblicate dalla segreteria <br><br>
