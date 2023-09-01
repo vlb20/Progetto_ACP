@@ -262,6 +262,17 @@ li.istituto{
     margin-top: 10px;
 }
 
+li.classe{
+    background-color: #f5f5f5;
+    color: #082B59;
+    padding: 6px;
+    text-indent: 10px;
+    text-align: center;
+    width: 300px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
 li.attivitadesc{
     margin: 8px;
     margin-right: 20px;
