@@ -13,21 +13,6 @@ const studenti = mongoose.createConnection("mongodb://127.0.0.1:27017/Studenti")
 const pagelle = mongoose.createConnection("mongodb://127.0.0.1:27017/Pagelle") //Creo la connessione per l'istanza del database Pagelle
 const attivita = mongoose.createConnection("mongodb://127.0.0.1:27017/Attivita") //Creo la connessione per l'istanza del database Attività
 const materie = mongoose.createConnection("mongodb://127.0.0.1:27017/Materia") //Creo la connessione per l'istanza del database Attività
-/*Variabili per l'utilizzo dei moduli node*/
-var http = require("http")
-var express = require("express")
-var mongoose = require("mongoose")
-var app = express() //Crea un'applicazione Express
-
-//Configurazione middleware
-app.use(express.urlencoded({extended: true})); //Permette di ricevere i JSON come array o stringhe
-app.use(express.static(__dirname+"/root_genitore")) //Setta la root di base alla directory specificata
-
-//Creazione databases MongoDB
-const studenti = mongoose.createConnection("mongodb://127.0.0.1:27017/Studenti") //Creo la connessione per l'istanza del database Studenti
-const pagelle = mongoose.createConnection("mongodb://127.0.0.1:27017/Pagelle") //Creo la connessione per l'istanza del database Pagelle
-const attivita = mongoose.createConnection("mongodb://127.0.0.1:27017/Attivita") //Creo la connessione per l'istanza del database Attività
-const materie = mongoose.createConnection("mongodb://127.0.0.1:27017/Materia") //Creo la connessione per l'istanza del database Attività
 
 
 //Definizione schema Mongoose per gli studenti
