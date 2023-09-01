@@ -135,8 +135,6 @@ main .content p {
     text-transform: uppercase;
 }
 
-/* RICONTROLLARE */
-
 
 /*AREA ISCRIZIONE*/
 
@@ -171,10 +169,34 @@ button.btn-outline-info {
     border-color: #082B59;
 }
 
+li.listamatricolestudenti{
+    margin: 8px;
+    margin-right: 20px;
+    padding: 7px;
+    width: fit-content;
+    background-color: #082B59;
+    color:#F5F5F5;
+    letter-spacing: .11em;
+}
+
+li.infoboxstudente{
+    color:#fffdfd;
+    letter-spacing: .11em;
+    margin: 8px;
+    margin-right: 20px;
+    padding: 7px;
+    width: fit-content;
+    background-color: #082B59;
+}
+
 
 
 
 /*AREA VISUALIZZA QUADRI*/
+li.errorpag{
+    color: #000000;
+}
+
 li.listidpagella{
     background-color: #082B59;
     color: #F5F5F5;
@@ -222,6 +244,31 @@ li.listvotosto{
     text-indent: 10px;
     text-align: left;
     width: 200px;
+}
+
+/*AREA ATTIVITA'*/
+li.erroract{
+    color: #000000;
+}
+
+li.istituto{
+    background-color: #082B59;
+    color:#F5F5F5;
+    padding: 6px;
+    text-indent: 10px;
+    text-align: center;
+    width: 300px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+li.attivitadesc{
+    margin: 8px;
+    margin-right: 20px;
+    padding: 7px;
+    width: fit-content;
+    background-color: gold;
+    letter-spacing: .11em;
 }
 
 /*AREA ALERT E NOTIFY */

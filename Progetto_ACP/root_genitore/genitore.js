@@ -124,8 +124,8 @@ var main=function(){
 
                 //Visualizza Iscrizione approvata o meno
 
-                 //GET Ajax all'url offerto da server_segreteria per l'ottenimento della lista di quadri
-                 $.getJSON("/getIscrizione", (iscrizioni)=>{
+                //GET Ajax all'url offerto da server_segreteria per l'ottenimento della lista di quadri
+                $.getJSON("/getIscrizione", (iscrizioni)=>{
 
                     iscrizioni.forEach((studente)=>{
 
@@ -205,7 +205,7 @@ var main=function(){
                         })
                         
                     }).fail((jqXHR)=>{
-                        $cont.append($("<li class='error'>").text("Nessun quadro trovato!"));
+                        $cont.append($("<li class='errorpag'>").text("Nessun quadro trovato!"));
                     })
 
                 }
@@ -244,7 +244,7 @@ var main=function(){
 
                     }).fail((jqXHR)=>{
                         //Fail nella ricerca delle attività -> messaggio di errore
-                        $cont.append($("<li class='error'>").text("Non sono state trovate attività!")).hide().fadeIn(1500).fadeOut(2000);
+                        $cont.append($("<li class='erroract'>").text("Non sono state trovate attività!")).hide().fadeIn(1500).fadeOut(2000);
                     });
 
                 }

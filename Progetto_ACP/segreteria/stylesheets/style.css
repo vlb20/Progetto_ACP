@@ -184,12 +184,13 @@ li.listamatricolestudenti{
 }
 
 li.infoboxstudente{
-    color:#F5F5F5;
+    color:#fffdfd;
     letter-spacing: .11em;
     margin: 8px;
     margin-right: 20px;
     padding: 7px;
     width: fit-content;
+    background-color: #082B59;
 }
 
 /*AREA INSERISCI QUADRI*/

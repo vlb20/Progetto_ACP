@@ -123,7 +123,7 @@ var main = function(){
                         studenti.forEach((studente)=>{
 
                             var $listamatricolestud = $("<li class='listamatricolestudenti'>").text("Matricola "+studente.matricola);
-                            var $infoboxstud = $("<li class='infoboxstudente'>").text(studente.nome+" "+studente.cognome+" CD:"+studente.codicefiscale+" Nato il:"+studente.datanascita+" Classe:"+studente.classe);
+                            var $infoboxstud = $("<li class='infoboxstudente'>").text(studente.nome+" "+studente.cognome+" CF:"+studente.codicefiscale+" Nato il:"+studente.datanascita+" Classe:"+studente.classe);
                             $cont.append($listamatricolestud).append($infoboxstud);
                         })
 
