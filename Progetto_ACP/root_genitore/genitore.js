@@ -85,6 +85,8 @@ var main=function(){
 
                         iscrizione_sottoposta=1;
 
+                        $(".tabs a:first-child span").trigger("click");
+
                     }else{
                         //No, non tutti i campi sono stati compilati
                         $("p.notify").text("Compila tutti i campi!").hide().fadeIn(800).fadeOut(3000);
@@ -124,8 +126,8 @@ var main=function(){
 
                 //Visualizza Iscrizione approvata o meno
 
-                //GET Ajax all'url offerto da server_segreteria per l'ottenimento della lista di quadri
-                $.getJSON("/getIscrizione", (iscrizioni)=>{
+                 //GET Ajax all'url offerto da server_segreteria per l'ottenimento della lista di quadri
+                 $.getJSON("/getIscrizione", (iscrizioni)=>{
 
                     iscrizioni.forEach((studente)=>{
 
@@ -205,7 +207,7 @@ var main=function(){
                         })
                         
                     }).fail((jqXHR)=>{
-                        $cont.append($("<li class='errorpag'>").text("Nessun quadro trovato!"));
+                        $cont.append($("<li class='error'>").text("Nessun quadro trovato!"));
                     })
 
                 }
@@ -244,7 +246,7 @@ var main=function(){
 
                     }).fail((jqXHR)=>{
                         //Fail nella ricerca delle attività -> messaggio di errore
-                        $cont.append($("<li class='erroract'>").text("Non sono state trovate attività!")).hide().fadeIn(1500).fadeOut(2000);
+                        $cont.append($("<li class='error'>").text("Non sono state trovate attività!")).hide().fadeIn(1500).fadeOut(2000);
                     });
 
                 }
@@ -252,6 +254,7 @@ var main=function(){
                 $("main .content").append($cont);
                 
             }
+            
             return false;
 
         })
@@ -289,7 +292,7 @@ var check = function(firstcall){
 
                 }else{
                     //Se invece mi trovo su un'altro tab notifico la modifica
-                    $(".alert").text("Aggiornate le attivita");
+                    $(".alert").text("C'è una nuova attività");
                     $(".alert").on("click", ()=>{
 
                         $(".alert").text("");
@@ -307,10 +310,11 @@ var check = function(firstcall){
 
 
 
-
-
-
 //Quando il documento si è caricato
 $(document).ready(function(){
-    main();
+    main(check(true));
 });
+
+setInterval(()=>{
+    check(false);
+}, 1000);
