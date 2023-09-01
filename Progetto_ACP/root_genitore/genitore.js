@@ -127,7 +127,7 @@ var main=function(){
                 //Visualizza Iscrizione approvata o meno
 
                  //GET Ajax all'url offerto da server_segreteria per l'ottenimento della lista di quadri
-                 $.getJSON("/getIscrizione", (iscrizioni)=>{
+                $.getJSON("/getIscrizione", (iscrizioni)=>{
 
                     iscrizioni.forEach((studente)=>{
 
@@ -169,7 +169,7 @@ var main=function(){
                     })
                     
                 }).fail((jqXHR)=>{
-                    $cont.append($("<li class='error'>").text("Nessun quadro trovato!"));
+                    $cont.append($("<li class='errorquad'>").text("Nessun quadro trovato!"));
                 })
 
 
@@ -207,7 +207,7 @@ var main=function(){
                         })
                         
                     }).fail((jqXHR)=>{
-                        $cont.append($("<li class='error'>").text("Nessun quadro trovato!"));
+                        $cont.append($("<li class='errorquad'>").text("Nessun quadro trovato!"));
                     })
 
                 }
@@ -219,7 +219,7 @@ var main=function(){
 
             }else if($element.parent().is(":nth-child(3)")){
 
-                //Qui visualizzerò le attività 
+                //Qui visualizzerò le attività
 
                 $cont=$("<ul>");
 
@@ -239,14 +239,14 @@ var main=function(){
                             var $div = $("<div class='d-flex gap-2'>")
                             //Descrizione dell'attività
                             var $actdesc = $("<li class='attivitadesc'>").text(attivita.descrizione);
-                            //Appendo 
+                            //Appendo
                             $cont.append($("<li class='"+attivita.tipo.toString().toLowerCase()+"'>").text(attivita.tipo+" "+attivita.data)).append($actdesc);
 
                         });
 
                     }).fail((jqXHR)=>{
                         //Fail nella ricerca delle attività -> messaggio di errore
-                        $cont.append($("<li class='error'>").text("Non sono state trovate attività!")).hide().fadeIn(1500).fadeOut(2000);
+                        $cont.append($("<li class='erroratt'>").text("Non sono state trovate attività!")).hide().fadeIn(1500).fadeOut(2000);
                     });
 
                 }
