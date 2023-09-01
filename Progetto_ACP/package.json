@@ -8,16 +8,6 @@
         "starts": "nodemon server_segreteria.js",
         "startc": "nodemon server_genitore.js"
     },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/vlb20/Progetto_ACP"
-    },
-    "author": "",
-    "license": "ISC",
-    "bugs": {
-        "url": "https://github.com/vlb20/Progetto_ACP/issues"
-    },
-    "homepage": "https://github.com/vlb20/Progetto_ACP#readme",
     "dependencies": {
         "express": "^4.18.2",
         "mongoose": "^7.5.0"
