@@ -40,33 +40,23 @@ var main=function(){
             }else if($element.parent().is(":nth-child(2)")){ //VISUALIZZA CORSI
 
                 $cont = $("<ul>");
-
-                //DA RIVEDERE
-                if(iscrizione_accettata==0){
-
-                    $("p.notify").text("Effettua prima l'iscrizione!").hide().fadeIn(800).fadeOut(3000);
-
-                }else{
-                //DA RIVEDERE
                 
-                    //GET Ajax all'url offerto da server_client per l'ottenimento dei corsi
-                    $.getJSON("/getCorsi", (corsi)=>{
+                //GET Ajax all'url offerto da server_client per l'ottenimento dei corsi
+                $.getJSON("/getCorsi", (corsi)=>{
 
-                        corsi.forEach((corso)=>{
+                    corsi.forEach((corso)=>{
 
-                            var $listidcorso = $("<li class='listidcorso'>").text("ID: "+corso.id);
-                            var $infocorso = $("<li class='infocorso'>").text(corso.patente.type+" - Tipo: "+corso.patente.enum);
+                        var $listidcorso = $("<li class='listidcorso'>").text("ID: "+corso.id);
+                        var $infocorso = $("<li class='infocorso'>").text(corso.patente.type+" - Tipo: "+corso.patente.enum);
 
-                            $cont.append($listidcorso).append($infocorso);
-                        
+                        $cont.append($listidcorso).append($infocorso);
+                    
 
-                        })
-                        
-                    }).fail((jqXHR)=>{
-                        $cont.append($("<li class='errorcorsi'>").text("Nessun corso trovato!"));
                     })
-
-                }
+                    
+                }).fail((jqXHR)=>{
+                    $cont.append($("<li class='errorcorsi'>").text("Nessun corso trovato!"));
+                })
 
                 //Append elementi html al content
                 $("main .content").append($cont);
@@ -77,36 +67,28 @@ var main=function(){
 
                 $cont=$("<ul>");
 
-                //DA RIVEDERE
-                if(iscrizione_accettata==0){
 
-                    $("p.notify").text("Effettua prima l'iscrizione!").hide().fadeIn(800).fadeOut(3000);
+                //GET per ottenere l'array di domande
+                $.getJSON("/getDomande", (domande)=>{
 
-                }else{
-                //DA RIVEDERE
+                    //Scorro l'array di attività
+                    domande.forEach((domanda)=>{
 
-                    //GET per ottenere l'array di domande
-                    $.getJSON("/getDomande", (domande)=>{
+                        //div con display flex per lo spazio tra i bottoni
+                        var $div = $("<div class='d-flex gap-2'>")
+                        //Descrizione dell'attività
+                        var $domric = $("<li class='domrichiesta'>").text(domanda.richiesta);
 
-                        //Scorro l'array di attività
-                        domande.forEach((domanda)=>{
+                        //Appendo
+                        $cont.append($("<li class='"+attivita.tipo.toString().toLowerCase()+"'>").text(attivita.tipo+" "+attivita.data)).append($actdesc);
 
-                            //div con display flex per lo spazio tra i bottoni
-                            var $div = $("<div class='d-flex gap-2'>")
-                            //Descrizione dell'attività
-                            var $domric = $("<li class='domrichiesta'>").text(domanda.richiesta);
-
-                            //Appendo
-                            $cont.append($("<li class='"+attivita.tipo.toString().toLowerCase()+"'>").text(attivita.tipo+" "+attivita.data)).append($actdesc);
-
-                        });
-
-                    }).fail((jqXHR)=>{
-                        //Fail nella ricerca delle attività -> messaggio di errore
-                        $cont.append($("<li class='erroratt'>").text("Non sono state trovate attività!")).hide().fadeIn(1500).fadeOut(2000);
                     });
 
-                }
+                }).fail((jqXHR)=>{
+                    //Fail nella ricerca delle attività -> messaggio di errore
+                    $cont.append($("<li class='errorquiz'>").text("Non sono state trovate domande del quiz!")).hide().fadeIn(1500).fadeOut(2000);
+                });
+
 
                 $("main .content").append($cont);
                 
