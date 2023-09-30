@@ -1,4 +1,3 @@
-
 //Settiamo le variabili per l'utilizzo dei moduli node
 var http = require("http")
 var express = require("express")
@@ -9,7 +8,7 @@ var app = express() //Crea un'applicazione Express
 
 //Configurazione del middleware
 app.use(express.urlencoded({extended: true})); //Permette di ricevere i JSON come array o stringhe
-app.use(express.static(__dirname+"/segreteria")) //Setta la root di base alla directory specificata
+app.use(express.static(__dirname+"/root_client")) //Setta la root di base alla directory specificata
 
 
 //Creazione del database MongoDB
@@ -23,8 +22,8 @@ const domande =mongoose.createConnection("mongodb://127.0.0.1:27017/Quiz")
 //DEFINIZIONE SCHEMI MONGOOSE
 
 //***Iscrizioni studenti***
-//All’atto dell’iscrizione, un impiegato della scuola guida registra i clienti nel sistema 
-//inserendo il loro nome, cognome, data di nascita, indirizzo di posta elettronica, telefono mobile, 
+//All’atto dell’iscrizione, un impiegato della scuola guida registra i clienti nel sistema
+//inserendo il loro nome, cognome, data di nascita, indirizzo di posta elettronica, telefono mobile,
 //tipo di patente che si vuole conseguire, ed eventuali patenti già in possesso.
 var studentiScheme = mongoose.Schema({
     nome: String,
@@ -49,9 +48,8 @@ var studentiScheme = mongoose.Schema({
 
 
 //***Corsi***
-//La scuola guida offre corsi per patenti di guida per 
+//La scuola guida offre corsi per patenti di guida per
 //motocicli (tipo AM, A1, A2, A) e per autoveicoli (tipo B).
-//NOTA:Con questa categoria ci riferiamo in realtà alle lezioni
 var corsiScheme = mongoose.Schema({
     id: Number,
     patente: {
@@ -63,9 +61,10 @@ var corsiScheme = mongoose.Schema({
 })
 
 //***Istruttori***
-//Gli istruttori sono inseriti nel sistema dal segretario, 
+//Gli istruttori sono inseriti nel sistema dal segretario,
 //che per ciascun istruttore inserisce nome, cognome, telefono e indirizzo e-mail
 var istruttoriScheme = mongoose.Schema({
+    id: Number,
     nome: String,
     cognome: String,
     cellulare: String,
@@ -74,13 +73,13 @@ var istruttoriScheme = mongoose.Schema({
 
 
 //***PRENOTAZIONI***
-//Un cliente accede al sistema per prenotare una lezione, 
-//indicando giorno e ora di inizio desiderati. Gli istruttori accedono al 
+//Un cliente accede al sistema per prenotare una lezione,
+//indicando giorno e ora di inizio desiderati. Gli istruttori accedono al
 //sistema per “accettare” le prenotazioni richieste dai clienti.
 var prenotazioniScheme = mongoose.Schema({
     id: Number,
     studente: {String},
-    istruttore: {String, String},
+    idIstruttore: Number,
     stato:{
         type: [String],
         enum: ["ATTESA", "ACCETTATA", "RIFIUTATA"],
@@ -134,9 +133,23 @@ Prenotazione.find({}).then((result)=>{
     console.error(err);
 });
 
+var idistruttori=0;
+
+Istruttore.find({}).then((result)=>{
+    var max=-1;
+    result.forEach(element => {
+        if(element.idistruttori>max){
+            max=element.idistruttori;
+        }
+    });
+    idistruttori=max;
+}).catch((err)=>{
+    console.error(err);
+});
+
 
 //Connessione
-http.createServer(app).listen(4000);
+http.createServer(app).listen(4008);
 
 //GESTIONE STUDENTI
 
@@ -186,7 +199,7 @@ app.get("/getIstruttori",(req,res)=>{
 app.get("/getDomande",(req,res)=>{
 
     //Raccolgo le domande dal database
-    Domanda.find({}).then((domande)=>{
+    Domanda.aggregate([{ $sample: { size: 40 } }]).then((domande)=>{
 
         //Ci sono delle doamnde?
         if(domande.length!=0){
@@ -200,6 +213,7 @@ app.get("/getDomande",(req,res)=>{
         }
     })
 })
+
 
 //GESTIONE CORSI
 
@@ -271,5 +285,4 @@ app.delete("/deletePrenotazione",(req,res)=>{
         }
     })
 });
-
 

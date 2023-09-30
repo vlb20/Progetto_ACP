@@ -1,0 +1,375 @@
+@import url('<link href="https://fonts.googleapis.com/css2?family=Crimson+Text&display=swap" rel="stylesheet">');
+
+* {
+    padding: 0;
+    margin: 0;
+    font-family: 'Crimson Text', serif !important;
+}
+
+ul{
+    list-style: none;
+    text-align: left;
+    padding-inline-start: 0px !important;
+}
+
+li{
+    list-style: none;
+}
+
+
+body {
+    margin: 0px;
+    background-color: #082B59;
+}
+
+header {
+    background-color: #f0f0f0;
+    margin-top: 20px;
+}
+
+main {
+    margin-top:50px;
+}
+
+html {
+    letter-spacing: .15em;
+    font-weight: 450;
+    font-size: 18px;
+}
+
+::selection {
+    background-color: #c5cd2c;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+input:focus,
+textarea:focus,
+select:focus,
+button:focus {
+    outline: none;
+    border: 0.5px solid #283739;
+}
+
+/* Elementi Testuali */
+
+div.title h1 {
+    font-size: 30px;
+    color:#082B59;
+    /*text-transform: uppercase;*/
+    font-weight: bolder;
+    font-family: serif;
+    padding: 30px;
+    background-color: #fafaf9;
+    margin-top: 10px;
+}
+
+a {
+    color: #ece9e6;
+    text-decoration: none;
+}
+
+.error{
+    color:#000000;
+}
+
+/*Gestione Documento*/
+header,
+main,
+footer {
+    min-width: 1100px;
+}
+
+header {
+    text-align: center;
+}
+
+
+footer {
+
+    background-color: #bd9f27;
+
+}
+
+main .container {
+    max-width: 950px;
+    margin: auto;
+}
+
+/* AREA MAIN */
+
+main .content {
+    background-color: #e2e8e9;
+    padding: 20px 0px 20px 20px;
+    text-align: left;
+    word-wrap: break-word;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    height: auto;
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+main .content p {
+    padding-bottom: 5px;
+}
+
+.tabs a span {
+    display: inline-block;
+    margin-right: 35px;
+    padding: 7px;
+    text-align: center;
+    width: fit-content;
+    font-weight: bold;
+    font-size: 20px;
+    color: #f3f3f3;
+    margin-top: 10px;
+    text-transform: uppercase;
+}
+
+.tabs a .active {
+    background-color: #bd9f27;
+    color: #F5F5F5;
+    text-transform: uppercase;
+}
+
+/* AREA GESTISCI STUDENTI */
+li.labelstatoiscr{
+    background-color: #082B59;
+    color:#ffffff;
+    padding: 6px;
+    text-indent: 10px;
+    text-align: center;
+    font-weight: bold;
+    width: fit-content;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+/*AREA LISTA STUDENTI*/
+ul.labelstudentiassegnati{
+    background-color: #0cec0c;
+    color:#F5F5F5;
+    padding: 6px;
+    text-indent: 10px;
+    text-align: center;
+    font-weight: bold;
+    width: fit-content;
+    margin-bottom: 10px;
+    margin-top: 15px;
+}
+
+ul.labelstudentirifiutati{
+    background-color: #e01e1e;
+    color:#F5F5F5;
+    padding: 6px;
+    text-indent: 10px;
+    text-align: center;
+    font-weight: bold;
+    width: fit-content;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+li.listamatricolestudenti{
+    margin: 8px;
+    margin-right: 20px;
+    padding: 7px;
+    width: fit-content;
+    background-color: #082B59;
+    color:#F5F5F5;
+    letter-spacing: .11em;
+}
+
+li.infoboxstudente{
+    color:#fffdfd;
+    letter-spacing: .11em;
+    margin: 8px;
+    margin-right: 20px;
+    padding: 7px;
+    width: fit-content;
+    background-color: #082B59;
+}
+
+/*AREA INSERISCI QUADRI*/
+
+button.addQuadro{
+    margin-left:20px;
+    border-color: #082B59;
+}
+
+select[name="choice"]{
+    margin-left:10px;
+}
+
+.labeltext{
+    background-color: #082B59;
+    color:#F5F5F5;
+    padding: 6px;
+    text-indent: 10px;
+    text-align: center;
+    width: 300px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+button.btn-outline-info {
+    color:#082B59 !important;
+    border-color: #082B59;
+}
+
+/*AREA VISUALIZZA QUADRI*/
+li.listidpagella{
+    background-color: #082B59;
+    color: #F5F5F5;
+    text-indent: 10px;
+    text-align: center;
+    width: 200px;
+    font-weight: bold;
+}
+
+li.infopagella{
+    background-color: #082B59;
+    color: #F5F5F5;
+    text-indent: 10px;
+    text-align: left;
+    width: 950px;
+}
+
+li.listvotoita{
+    background-color: #bd9f27;
+    color: #f0f0f0;
+    text-indent: 10px;
+    text-align: left;
+    width: 200px;
+}
+
+li.listvotomat{
+    background-color: #ffffff;
+    color: #000000;
+    text-indent: 10px;
+    text-align: left;
+    width: 200px;
+}
+
+li.listvotoing{
+    background-color: #bd9f27;
+    color: #f0f0f0;
+    text-indent: 10px;
+    text-align: left;
+    width: 200px;
+}
+
+li.listvotosto{
+    background-color: #ffffff;
+    color: #000000;
+    text-indent: 10px;
+    text-align: left;
+    width: 200px;
+}
+
+/*AREA INSERISCI ATTIVITA'*/
+button.publish{
+    margin-left:20px;
+    transform: translateY(-30%);
+}
+
+/*AREA GESTISCI ATTIVITA'*/
+li.istituto{
+    background-color: #082B59;
+    color:#F5F5F5;
+    padding: 6px;
+    text-indent: 10px;
+    text-align: center;
+    width: 300px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+li.classe{
+    background-color: #bd9f27;
+    color:#F5F5F5;
+    padding: 6px;
+    text-indent: 10px;
+    text-align: center;
+    width: 300px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+li.attivitadesc{
+    margin: 8px;
+    margin-right: 20px;
+    padding: 7px;
+    width: fit-content;
+    background-color: gold;
+    letter-spacing: .11em;
+}
+
+button.deleteactivity{
+    margin-right:15px;
+    align-self:center;
+}
+
+/*AREA ALERT E NOTIFY */
+
+p.alert {
+    color: #e01e1e;
+    margin-bottom: 15px;
+    margin-left: auto;
+}
+
+p.alert:hover {
+    cursor: pointer;
+}
+
+p.notify {
+    color:#F5F5F5;
+    display: inline-block;
+    padding: 20px 0px 20px 20px;
+    margin-left: auto;
+}
+
+
+/* AREA FOOTER */
+
+footer .container {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-around;
+
+}
+
+.infobox {
+    background-color: #bd9f27;
+    padding: 10px;
+    text-align: center;
+}
+
+.quotes {
+    background-color: #bd9f27;
+    padding: 10px;
+}
+
+.infobox p {
+    padding: 5px;
+    color: #F5F5F5;
+}
+
+.quotes li, .infobox li {
+    padding-bottom: 10px;
+    color: #F5F5F5;
+}
+
+footer h5 {
+    font-weight: bold;
+    font-size: 18px;
+    color: #082B59;
+    text-transform: uppercase;
+    margin-top: 8px;
+    margin-bottom: 5px;
+}
