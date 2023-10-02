@@ -1,5 +1,6 @@
 //Settiamo le variabili per l'utilizzo dei moduli node
 var http = require("http")
+const path = require('path'); //per la manipolazione del path
 var express = require("express")
 var mongoose = require("mongoose");
 const { stat } = require("fs/promises");
@@ -24,9 +25,38 @@ app.use(session({
     saveUninitialized: false                 // Non salvare la sessione se non è stata inizializzata
 }));
 
+// Serve CSS files
+app.get("/stylesheets/:filename", (req, res) => {
+    const filename = req.params.filename;
+    res.sendFile(path.join(__dirname, 'root_client', 'stylesheets', filename));
+});
+
+// Serve JavaScript files
+app.get("/javascript/:filename", (req, res) => {
+    const filename = req.params.filename;
+    res.sendFile(path.join(__dirname, 'root_client', 'javascript', filename));
+});
+
+// Serve img icon files
+app.get("/img/icons/:filename", (req, res) => {
+    const filename = req.params.filename;
+    res.sendFile(path.join(__dirname, 'img', 'icons', filename));
+});
+
+// Serve img guides files
+app.get("/img/background/:filename", (req, res) => {
+    const filename = req.params.filename;
+    res.sendFile(path.join(__dirname, 'img', 'background', filename));
+});
+
+// Serve img files in the main directory
+app.get("/img/:filename", (req, res) => {
+    const filename = req.params.filename;
+    res.sendFile(path.join(__dirname, 'img', filename));
+});
 
 //Creazione del database MongoDB
-const studenti = mongoose.createConnection("mongodb://127.0.0.1:27017/MyAutoscuola") //Creo una connessione con il database per l'istanza studenti
+const studenti = mongoose.createConnection("mongodb://127.0.0.1:27017/Studenti") //Creo una connessione con il database per l'istanza studenti
 const corsi = mongoose.createConnection("mongodb://127.0.0.1:27017/Corsi")
 const istruttori = mongoose.createConnection("mongodb://127.0.0.1:27017/Istruttori")
 const prenotazioni = mongoose.createConnection("mongodb://127.0.0.1:27017/Prenotazioni")
@@ -72,8 +102,7 @@ var corsiScheme = mongoose.Schema({
         type: [String],
         enum: ["AM", "A1", "A2","A","B"],
         default: 'B'
-    },
-    descrizione: String
+    }
 
 })
 
@@ -95,7 +124,7 @@ var istruttoriScheme = mongoose.Schema({
 //sistema per “accettare” le prenotazioni richieste dai clienti.
 var prenotazioniScheme = mongoose.Schema({
     id: Number,
-    studente: {String},
+    studente: {String}, //username
     idIstruttore: Number,
     stato:{
         type: [String],
@@ -141,8 +170,8 @@ var idprenotazioni=0;
 Prenotazione.find({}).then((result)=>{
     var max=-1;
     result.forEach(element => {
-        if(element.idprenotazioni>max){
-            max=element.idprenotazioni;
+        if(element.id>max){
+            max=element.id;
         }
     });
     idprenotazioni=max;
@@ -155,8 +184,8 @@ var idistruttori=0;
 Istruttore.find({}).then((result)=>{
     var max=-1;
     result.forEach(element => {
-        if(element.idistruttori>max){
-            max=element.idistruttori;
+        if(element.id>max){
+            max=element.id;
         }
     });
     idistruttori=max;
@@ -185,7 +214,7 @@ app.post('/login/log', (req, res) => {
     const query = { username: username };
 
     // Find the user (at maximum one) with the specified email
-    studenti.find(query)
+    Studente.find(query)
     .then((iscrizioni) => {
 
         //Nessuna iscrizione trovata
@@ -209,7 +238,7 @@ app.post('/login/log', (req, res) => {
 
                 //settiamo le variabili di sessione
                 req.session.authenticated = true;
-                req.session.username = account.username;
+                req.session.username = studente.username;
 
                 // inviamo la risposta
                 res.json(response);
@@ -230,13 +259,37 @@ app.post('/login/log', (req, res) => {
     });
 });
 
+// GET: richiesta per vedere se siamo autenticati
+app.get('/autenticazioneAvvenuta', (req, res) => {
+
+    var response;
+
+    // Se è vero ritorniamo, lo stato di autenticazione e l'username
+    if (req.session.authenticated) {
+        response = {
+            auth: req.session.authenticated,
+            username: req.session.username
+        }
+    }
+
+    // altrimenti ritorniamo solo lo stato di autenticazione (falso)
+    else {
+        response = {
+            auth: req.session.authenticated,
+        }
+    }
+    
+    res.json(response);
+
+});
+
 //GESTIONE STUDENTI
 
 //GET: Visualizza Studenti
-app.get("/getStudenti",(req,res)=>{
+app.get("/getStudenti/:username",(req,res)=>{
 
-    //Raccolgo le iscrizioni dal database
-    Studente.find({}).then((iscrizioni)=>{
+    //Raccolgo l'iscrizione dal database
+    Studente.find({"username":req.params.username.toString()}).then((iscrizioni)=>{
 
         //Ci sono delle iscrizioni?
         if(iscrizioni.length!=0){
@@ -305,7 +358,7 @@ app.get("/getCorsi",(req,res)=>{
 
         //Ci sono dei corsi?
         if(risp.length!=0){
-
+            
             //Sì,do un ack
             res.status(200).json(risp);
         }else{
@@ -324,7 +377,7 @@ app.post("/creaPrenotazione",(req,res)=>{
 
     //Creazione
     var newpren = new Prenotazione({id:Number(++idprenotazioni), studente: req.body.studente, istruttore:req.body.istruttore, giorno:req.body.giorno, orario:req.body.orario});
-    newcourse.save().then(()=>{
+    newpren.save().then(()=>{
         res.status(200).json(newpren);
     })
 
@@ -334,7 +387,7 @@ app.post("/creaPrenotazione",(req,res)=>{
 app.get("/getPrenotazioni/:studente",(req,res)=>{
 
     //Raccolgo i corsi dal database
-    Prenotazione.find({"studente":req.params.studente.toString().toUpperCase()}).then((risp)=>{
+    Prenotazione.find({"studente":req.params.studente.toString()}).then((risp)=>{
 
         //Ci sono dei corsi?
         if(risp.length!=0){

@@ -22,9 +22,48 @@ body {
     background-color: #082B59;
 }
 
-header {
+header{
+    /* Contenuto centrato e distanziato di 20px */
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    gap: 160px;
+
+    width: 100%;
+    height: 20%;
+
     background-color: #f0f0f0;
-    margin-top: 20px;
+}
+
+.banner-intro {
+    width: 100%;
+    height: 500px;
+    padding: 2%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+
+    color: white;
+
+}
+
+.main-spacer {
+    width: 100%;
+    height: 20px;
+}
+
+.icon-header {
+    padding: 5px;
+    width: 80px;
+}
+
+header h1 {
+    font-size: 56px;
 }
 
 main {

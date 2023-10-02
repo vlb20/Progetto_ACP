@@ -115,7 +115,9 @@ nav li a {
     text-decoration: none;
 }
 
-
+p{
+    font-size: large;
+}
 
 footer {
     width: 100%;
