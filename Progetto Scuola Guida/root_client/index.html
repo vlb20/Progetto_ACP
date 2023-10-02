@@ -1,111 +1,79 @@
 <!DOCTYPE html>
 
-<html>
+    <head>
+        <link href="stylesheets/index.css" rel="stylesheet" , type="text/css">
+        <link href="reset.css" rel="stylesheet" , type="text/css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+        <title>Autoscuola FleGO </title>
+    </head>
 
-<head>
+    <body>
 
-    <!-- Metadati, reference agli stylesheet css; elementi leggeri che possono essere caricati senza problemi !-->
-    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css'
-        integrity='sha512-t4GWSVZO1eC8BM339Xd7Uphw5s17a86tIZIj8qRxhnKub6WoyhnrxeCIMeAqBPgdZGlCcG2PrZjMc+Wr78+5Xg=='
-        crossorigin='anonymous' />
-    <link href="stylesheets/style.css" rel="stylesheet" , type="text/css">
-    <link href="reset.css" rel="stylesheet" , type="text/css">
-    <title>MyFleGO - Studenti</title>
+        <header>
+            <img src="../img/icons/driving_school.png" class="icon-header" alt="FleGO logo">
+            <h1>Autoscuola Fle<span style="color: red;">GO</span></h1>
+            <a id="login" href="/login">
+                    <img src="../img/icons/user-circle.svg">
+                    Login
+            </a>
+        </header>
 
-</head>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+            </ul>
+        </nav>
 
+        <main>
 
-<body>
+            <section class="banner-intro"
+                     style="background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(../img/icons/campi_flegrei.webp)">
+                <h2>Benvenuti all'autoscuola Flegrea</h2>
+                <p>
+                    Sei pronto a conquistare la strada? Che tu sia un principiante o un conducente esperto che desidera affinare le tue abilità, 
+                    l’Autoscuola Flego è il posto giusto per te. Offriamo corsi di guida personalizzati, progettati per soddisfare le esigenze di ogni studente. 
+                    I nostri istruttori esperti e pazienti ti guideranno passo dopo passo, assicurandosi che tu acquisisca la sicurezza e le competenze necessarie 
+                    per guidare in modo sicuro e responsabile. Ma non è tutto! Con l’Autoscuola Flego, avrai accesso a risorse didattiche online, sessioni di pratica flessibili 
+                    e supporto continuo per garantire che tu sia pienamente preparato per l’esame di guida.Non perdere tempo, unisciti a noi oggi e inizia il tuo viaggio 
+                    verso la libertà della guida. L’Autoscuola Flego è più di una scuola di guida, è il tuo partner nel viaggio verso la strada. Ti aspettiamo! 
+                </p>
+            </section>
 
-    <header>
+            <section class="main-spacer"></section>
 
-        <div class="title">
+            <section class="banner-intro"
+                    style="background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(../img/tours/sardinia.jpg)">
+                <h2>Cosa devi fare</h2>
+                <p>
+                    Fai il login cliccando l'icona in alto a destra per accedere alla tua pagina personale.
+                    Troverai i tuoi dati personali riguardanti l'iscrizione al corso da te scelto quando sei venuto a trovarci. 
+                    In più avrai la possibilità di esercitarti con delle simulazioni sui vari argomenti teorici oppure prenotare una lezione pratica.
+                </p>
+            </section>
 
-            <h1>MyFleGO - Studenti</h1>
+        </main>
 
-        </div>
+        <footer>
+            <p class="contacts">Contatti</p>
+            <section class="contact-icons">
+                <a href="mailto:cr.carleo@studenti.unina.it" target="_blank"><img src="../img/icons/mail.svg">     </a>
+                <a href="mailto:vincenzol.bruno@studenti.unina.it" target="_blank"><img src="../img/icons/mail.svg">     </a>
+            </section>
 
-    </header>
-
-
-    <main>
-
-        <div class="container">
-
-            <div class="tabs">
-
-                <a href=""><span id="gestisciiscrizionetab" class="active">Area personale</span></a>
-                <a href=""><span id="corsitab">Visualizza Corsi</span></a>
-                <a href=""><span id="domandetab">Quiz</span></a>
-                <a href=""><span id="istruttoritab">Lista Istruttori</span></a>
-                <a href=""><span id="creaprenotazionetab">Prenota la tua lezione</span></a>
-                <a href=""><span id="prenotazionitab">Gestisci Prenotazioni</span></a>
-                
-
-            </div>
-
-
-            <div class="content">
-
-
-            </div>
-
-
-            <div>
-
-                <p class="notify"></p>
-
-                <p class="alert"></p>
-
-            </div>
-
-
-        </div>
-
-
-    </main>
-
-
-    <footer>
-
-        <div class="container">
-
-            <div class="infobox">
-
-                <h5> Info</h5>
-                <p>Bruno - Carleo</p>
-                <p>Napoli NA</p>
-
-            </div>
-
-            <div class="quotes">
-
-                <h5>Citazioni</h5>
-                <ul>
-
-                    <li>La scuola è imparare quello che non sapevi nemmeno di non sapere</li>
-                    <li>“È sciocco chiedere agli dèi quello che si è in condizione di procurarsi da sé stessi.”</li>
-                    <li>“Fatica da bestia fa crescere il mucchio, ma rende triste la vita.”</li>
-                    <li>“È preferibile che un bel progetto non vada in porto piuttosto che abbia successo un progetto dissennato.”</li>
-                    <li>“Non è tanto dell'aiuto degli amici che noi abbiamo bisogno, quanto della fiducia che al bisogno ce ne potremo servire.”</li>
-                    <li>“Meglio essere senza fortuna ma saggi che fortunati e stolti.”</li>
-                    <li>“I dolori più gravi uccidono, se durano a lungo non sono gravi.”</li>
-                    <li>...</li>
-
-                </ul>
-
-            </div>
-
-        </div>
-
-    </footer>
-
-
-    <!-- File JavaScripts inseriti alla fine del body per evitare possibili rallentamenti nel loading della pagina !-->
-    <script src="https://code.jquery.com/jquery-3.4.0.min.js"></script>
-    <script src="frontcl.js"></script>
-
-</body>
-
-
+            <section class="footer-description">
+                <div>
+                    <p>
+                        Università degli Studi di Napoli Federico II<br>
+                        Corso di Advanced Computer Programming<br>
+                        <hr>
+                        Cristina Carleo e Vincenzo Luigi Bruno
+                    </p>
+                </div>
+            </section>
+        </footer>
+        
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+        <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+        <script src="../javascript/index.js"></script>
+    </body>
 </html>

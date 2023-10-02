@@ -4,11 +4,25 @@ var express = require("express")
 var mongoose = require("mongoose");
 const { stat } = require("fs/promises");
 const { callbackify } = require("util");
+const session = require('express-session');     //per usare un'oggetto sessione
+const crypto = require('crypto');
 var app = express() //Crea un'applicazione Express
 
 //Configurazione del middleware
 app.use(express.urlencoded({extended: true})); //Permette di ricevere i JSON come array o stringhe
 app.use(express.static(__dirname+"/root_client")) //Setta la root di base alla directory specificata
+
+// Genera una chiave di sessione casuale
+const generaChiaveSegreta = () => {
+    return crypto.randomBytes(32).toString('hex');  // Chiave casuale di 32 byte convertita in esadecimale
+};
+
+// Inizializzazione della sessione
+app.use(session({
+    secret: generaChiaveSegreta(),           // Invoca la funzione per ottenere la chiave casuale
+    resave: false,                           // Non salvare la sessione se non è stata modificata
+    saveUninitialized: false                 // Non salvare la sessione se non è stata inizializzata
+}));
 
 
 //Creazione del database MongoDB
@@ -150,6 +164,68 @@ Istruttore.find({}).then((result)=>{
 
 //Connessione
 http.createServer(app).listen(4008);
+
+// GET: mostra la pagina di login
+app.get("/login", (req, res) => {
+
+    // Serving the requested page
+    res.sendFile(__dirname + '/root_client/login.html');
+});
+
+// POST: login utente
+app.post('/login/log', (req, res) => {
+
+    // Read email and password from request's body
+    var {username, password} = req.body;
+
+    // Prepare query
+    const query = { username: username };
+
+    // Find the user (at maximum one) with the specified email
+    studenti.find(query)
+    .then((iscrizioni) => {
+
+        //Nessuna iscrizione trovata
+        if (iscrizioni == []) {
+            console.log('\t\t\t[SERVER]: username non valido.');
+        }
+
+        //Se invece l'username corrisponde
+        else {
+
+            // Lo studente è il primo e unico documento che ritorna dal DB
+            studente = iscrizioni[0];
+
+            // Se la password è corretta
+            if (password === studente.password) {
+
+                // inviamo come risposta success
+                var response = {
+                    outcome: "success"
+                }
+
+                //settiamo le variabili di sessione
+                req.session.authenticated = true;
+                req.session.username = account.username;
+
+                // inviamo la risposta
+                res.json(response);
+            }
+
+            // Password non valida
+            else {
+
+                // inviamo come risposta failure
+                let response = {
+                    outcome: "failure"
+                }
+
+                // inviamo la risposta
+                res.json(response);
+            }
+        }
+    });
+});
 
 //GESTIONE STUDENTI
 
