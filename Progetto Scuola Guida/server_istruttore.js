@@ -70,6 +70,7 @@ var corsiScheme = mongoose.Schema({
 //Gli istruttori sono inseriti nel sistema dal segretario, 
 //che per ciascun istruttore inserisce nome, cognome, telefono e indirizzo e-mail
 var istruttoriScheme = mongoose.Schema({
+    id: Number,
     nome: String,
     cognome: String,
     cellulare: String,
@@ -84,7 +85,7 @@ var istruttoriScheme = mongoose.Schema({
 var prenotazioniScheme = mongoose.Schema({
     id: Number,
     studente: {String},
-    istruttore: {String, String},
+    idIstruttore: Number,
     stato:{
         type: [String],
         enum: ["ATTESA", "ACCETTATA", "RIFIUTATA"],
