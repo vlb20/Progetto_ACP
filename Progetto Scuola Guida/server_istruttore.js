@@ -9,7 +9,7 @@ var app = express() //Crea un'applicazione Express
 
 //Configurazione del middleware
 app.use(express.urlencoded({extended: true})); //Permette di ricevere i JSON come array o stringhe
-app.use(express.static(__dirname+"/segreteria")) //Setta la root di base alla directory specificata
+app.use(express.static(__dirname+"/root_istruttore")) //Setta la root di base alla directory specificata
 
 
 //Creazione del database MongoDB
@@ -39,9 +39,11 @@ var studentiScheme = mongoose.Schema({
         default: 'B'
     },
     patentiinpossesso: {
-        type: [String],
-        enum: ["AM", "A1", "A2","A","B"],
-        default: 'B'
+        AM: Boolean,
+        A1: Boolean,
+        A2: Boolean,
+        A: Boolean,
+        B: Boolean
     },
     username: String,
     password: String
@@ -59,7 +61,8 @@ var corsiScheme = mongoose.Schema({
         type: [String],
         enum: ["AM", "A1", "A2","A","B"],
         default: 'B'
-    }
+    },
+    descrizione: String
 
 })
 
@@ -157,6 +160,25 @@ app.get("/getPrenotazioni/:istruttore",(req,res)=>{
 
     //Raccolgo i corsi dal database
     Prenotazione.find({"istruttore":req.params.istruttore.toString().toUpperCase()}).then((risp)=>{
+
+        //Ci sono dei corsi?
+        if(risp.length!=0){
+
+            //Sì,do un ack
+            res.status(200).json(risp);
+        }else{
+
+            //No,errore
+            res.status(404).json(risp);
+        }
+    })
+});
+
+//GET: Visualizza Prenotazioni in base allo statp
+app.get("/getPrenotazioni/:stato",(req,res)=>{
+
+    //Raccolgo i corsi dal database
+    Prenotazione.find({"stato":req.params.istruttore.toString().toUpperCase()}).then((risp)=>{
 
         //Ci sono dei corsi?
         if(risp.length!=0){
