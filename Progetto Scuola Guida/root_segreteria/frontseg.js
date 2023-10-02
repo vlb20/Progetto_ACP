@@ -1,5 +1,3 @@
-//Variabile globale che servirà per notificare una nuova iscrizione
-var num_iscrizioni=0;
 
 var main = function(){
 
@@ -22,49 +20,81 @@ var main = function(){
 
             //Gestito il comportamento in base al tab cliccato
             if($(element).parent().is(":nth-child(1)")){
+                
                 //GESTISCI STUDENTI - La segreteria inserisce manualmente le informazioni dello studente
-
+                
                 $cont=$("<div>");
-
 
                 //Label e input box per i campi da riempire
                 var $labelnome=$("<p class='labeltext'>").text("Nome");
-                var $inputnome=$("<textarea class='textbox' placeholder='Inserisci nome ...'>");
+                var $inputnome=$("<input class='textbox' placeholder='Inserisci nome ...'>");
 
 
                 var $labelcognome=$("<p class='labeltext'>").text("Cognome");
-                var $inputcognome=$("<textarea class='textbox' placeholder='Inserisci cognome ...'>");
-
-
-                var $labelcodicefiscale=$("<p class='labeltext'>").text("Codice Fiscale");
-                var $inputcodicefiscale=$("<textarea class='textbox' placeholder='Inserisci il codice fiscale dello studente...'>");
+                var $inputcognome=$("<input class='textbox' placeholder='Inserisci cognome ...'>");
 
                 var $labeldatanascita = $("<p class='labeltext'>").text("Data di Nascita");
                 var $inputdatanascita = $("<input class='calendar' type='date'>");
 
-                var $labelclasse=$("<p class='labeltext'>").text("Classe");
-                var $inputclasse=$("<input class='inputpagelle' placeholder='Inserisci la classe dello studente...'>");
+                var $labelemail=$("<p class='labeltext'>").text("Email");
+                var $inputemail=$("<input class='textbox' placeholder='Inserisci email...'>");
 
+                var $labelcellulare=$("<p class='labeltext'>").text("Cellulare");
+                var $inputcellulare=$("<input class='textbox' placeholder='Inserisci recapito dello studente...'>");
+
+                //Per le patenti implemento una selezione
+                var $labelpatente=$("<p class='labeltext'>").text("Patente");
+                var $selquad = $("<select class='selezione' name='choice'> <option value='Autoveicolo'>Autoveicolo</option> <option value='Motociclo' selected>Motociclo</option> </select>");
+                var $selpatente = $("<select class='selezione' name='choice'> <option value='AM'>AM</option> <option value='A1' selected>A1</option> <option value='A2' selected>A2</option> <option value='A' selected>A</option> <option value='B' selected>B</option>  </select>");
+
+                var $labelpatentiinpossesso=$("<p class='labeltext'>").text("Patenti già in possesso");
+                
+                var $AM = $("<input type='checkbox' name='choice' value='AM'/>AM <br />");
+                var $A1 = $("<input type='checkbox' name='choice' value='A1'/>A1 <br />");
+                var $A2 = $("<input type='checkbox' name='choice' value='A2'/>A2 <br />");
+                var $A = $("<input type='checkbox' name='choice' value='A'/>A <br />")
+                var $B = $("<input type='checkbox' name='choice' value='B'/>B <br /> <br />")
+        
+                //Creo un vettore che raccolga gli input immessi tramite checkboxes
+                var selezioni = [];
+                var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+
+                // Itera attraverso gli elementi di input
+                checkboxes.forEach(function(checkbox) {
+                    if (checkbox.checked) {
+                        selezioni.push(checkbox.value); // Aggiungi il valore selezionato all'array
+                    }
+                });
+
+                //__DEBUG___________________________________________________________________________________
+
+                console.log("Selezioni: " + selezioni.join(', '));
+
+                //_________________________________________________________________________________________
+                
                 var $buttoniscrizione=$("<button class='subscribe btn btn-outline-info'>").text("Invia");
 
                 //Aggiungo un listener sul click del bottone
                 $buttoniscrizione.on("click",function(){
 
                     //Sono stati compilati tutti i campi?
-                    if($inputnome.val()!="" && $inputcognome.val()!="" && $inputcodicefiscale.val()!="" && $inputdatanascita.val()!="" && $inputclasse.val()!="" ){
+                    if($inputnome.val()!="" && $inputcognome.val()!="" && $inputemail.val()!="" && $inputdatanascita.val()!="" && $inputcellulare.val()!="" && ($selquad==Autoveicolo && $selpatente==B) && ($selquad==Motociclo && $selpatente!=B)  && ($selquad!=Motociclo && $selpatente==B)){
 
                         //Sì,tutto compilato
                         //Creo l'oggetto studente
                         var stud={nome: $inputnome.val(), 
                             cognome: $inputcognome.val(),
-                            codicefiscale: $inputcodicefiscale.val(),
                             datanascita: $inputdatanascita.val(),
-                            classe: $inputclasse.val()}
+                            email: $inputemail.val(),
+                            cellulare: $inputcellulare.val(),
+                            patente: {$selquad, $selpatente},
+                            patentiinpossesso: selezioni
+                        }
 
                         //Chiamata AJAX - POST per inviare l'iscrizione
 
                         $.ajax({
-                            url: "/effettuaIscrizione",
+                            url: "/inserisciStudenti",
                             type:"POST",
                             dataType:"json",
                             data:stud
@@ -73,13 +103,129 @@ var main = function(){
                             $("p.notify").text("Iscrizione sottoposta").hide().fadeIn(800).fadeOut(3000);
                             $inputnome.val("");
                             $inputcognome.val("");
-                            codicefiscalestud=$inputcodicefiscale.val();
-                            $inputcodicefiscale.val("");
                             $inputdatanascita.val("");
-                            $inputclasse.val("");
+                            $inputemail.val("");
+                            $inputcellulare.val("");
                         })
 
-                        iscrizione_sottoposta=1;
+                        $(".tabs a:first-child span").trigger("click");
+
+                    }else if(($selquad!=Autoveicolo && $selpatente==B) && ($selquad==Autoveicolo && $selpatente!=B) ){
+                        //Selezione non valida della patente
+                        $("p.notify").text("Selezione patente non valida!").hide().fadeIn(800).fadeOut(3000);
+                    
+                    }else{
+                        //No, non tutti i campi sono stati compilati
+                        $("p.notify").text("Compila tutti i campi!").hide().fadeIn(800).fadeOut(3000);
+                    }
+                });
+
+                $inputnome.on("keypress",function(event){
+                    if(event.key=="Enter")
+                    $inputcognome.focus();
+                });
+
+                $inputcognome.on("keypress",function(event){
+                    if(event.key=="Enter")
+                    $inputdatanascita.focus();
+                });
+
+                $inputdatanascita.on("keypress",function(event){
+                    if(event.key=="Enter")
+                    $inputemail.focus();
+                });
+
+                $inputemail.on("keypress",function(event){
+                    if(event.key=="Enter")
+                    $inputcellulare.focus();
+                });
+
+                $inputcellulare.on("keypress",function(event){
+                    if(event.key=="Enter")
+                    $buttoniscrizione.focus();
+                });
+
+                //append degli elemnti html
+                $cont.append($labelnome).append($inputnome).append($labelcognome).append($inputcognome).append($labeldatanascita).append($inputdatanascita).append($labelemail).append($inputemail).append($labelcellulare).append($inputcellulare).append($labelpatente).append($selquad).append($selpatente).append($labelpatentiinpossesso).append($AM).append($A1).append($A2).append($A).append($B).append( $buttoniscrizione);
+                $("main .content").append($cont);
+
+
+
+            }else if($(element).parent().is(":nth-child(2)")){
+                //LISTA STUDENTI - La segreteria visualizza la lista degli studenti iscritti
+
+                $cont = $("<div>");
+
+                //GET Ajax all'url offerto da server_segreteria per l'ottenimento della lista degli studenti assegnati
+                $.getJSON("/getStudenti", (studenti)=>{
+
+                    var $labelstud = $("<ul class='labelstudenti'>").text("STUDENTI ISCRITTI");
+                    $cont.append($labelstud);
+                        studenti.forEach((studente)=>{
+
+                            var $infoboxstud = $("<li class='infoboxstudente'>").text(studente.nome+" "+studente.cognome+"  Nato il:"+studente.datanascita+" \n email:"+studente.email+" cellulare:"+studente.cellulare+" \n patente:"+studente.patente+
+                            "\n Patenti in possesso \n AM:"+studente.patentiinpossesso.AM+"\n A1:"+studente.patentiinpossesso.A1+"\n A2:"+studente.patentiinpossesso.A2+"\n A:"+studente.patentiinpossesso.A+"\n B:"+studente.patentiinpossesso.B);
+
+                            $cont.append($infoboxstud);
+                        })
+
+                }).fail((jqXHR)=>{
+                    $(".notify").text(" Nessuno studente trovato! ").hide().fadeIn(800).fadeOut(3000);
+                })
+                //Append della nostra variabile al content
+                $("main .content").append($cont);
+
+            }else if($(element).parent().is(":nth-child(3)")){
+
+                //GESTISCI ISTRUTTORI - La segreteria inserisce manualmente le informazioni dell'istruttore
+                
+                $cont=$("<div>");
+
+                //Label e input box per i campi da riempire
+                var $labelnome=$("<p class='labeltext'>").text("Nome");
+                var $inputnome=$("<input class='textbox' placeholder='Inserisci nome ...'>");
+
+
+                var $labelcognome=$("<p class='labeltext'>").text("Cognome");
+                var $inputcognome=$("<input class='textbox' placeholder='Inserisci cognome ...'>");
+
+                var $labelemail=$("<p class='labeltext'>").text("Email");
+                var $inputemail=$("<input class='textbox' placeholder='Inserisci email...'>");
+
+                var $labelcellulare=$("<p class='labeltext'>").text("Cellulare");
+                var $inputcellulare=$("<input class='textbox' placeholder='Inserisci recapito...'>");
+
+                var $buttoniscrizione=$("<button class='subscribe btn btn-outline-info'>").text("Invia");
+
+                //Aggiungo un listener sul click del bottone
+                $buttoniscrizione.on("click",function(){
+
+                    //Sono stati compilati tutti i campi?
+                    if($inputnome.val()!="" && $inputcognome.val()!="" && $inputemail.val()!=""  && $inputcellulare.val()!=""){
+
+                        //Sì,tutto compilato
+                        //Creo l'oggetto studente
+                        var istr={nome: $inputnome.val(), 
+                            cognome: $inputcognome.val(),
+                            cellulare: $inputcellulare.val(),
+                            email: $inputemail.val()
+                        }
+
+                        //Chiamata AJAX - POST per inviare l'iscrizione
+
+                        $.ajax({
+                            url: "/inserisciIstruttori",
+                            type:"POST",
+                            dataType:"json",
+                            data:istr
+                        }).done(function(){
+                            //Inserimento avvenuto con successo
+                            $("p.notify").text("Iscrizione sottoposta").hide().fadeIn(800).fadeOut(3000);
+                            $inputnome.val("");
+                            $inputcognome.val("");
+                            $inputemail.val("");
+                            $inputcellulare.val("");
+                        })
 
                         $(".tabs a:first-child span").trigger("click");
 
@@ -96,346 +242,138 @@ var main = function(){
 
                 $inputcognome.on("keypress",function(event){
                     if(event.key=="Enter")
-                    $inputcodicefiscale.focus();
+                    $inputemail.focus();
                 });
 
-                $inputcodicefiscale.on("keypress",function(event){
+                $inputemail.on("keypress",function(event){
                     if(event.key=="Enter")
-                    $inputdatanascita.focus();
+                    $inputcellulare.focus();
                 });
 
-                $inputdatanascita.on("keypress",function(event){
+                $inputcellulare.on("keypress",function(event){
                     if(event.key=="Enter")
-                    $inputclasse.focus();
-                });
-
-                $inputclasse.on("keypress",function(event){
-                    if(event.key=="Enter")
-                        $buttoniscrizione.focus();
+                    $buttoniscrizione.focus();
                 });
 
                 //append degli elemnti html
-                $cont.append($labelnome).append($inputnome).append($labelcognome).append($inputcognome).append($labelcodicefiscale).append($inputcodicefiscale).append($labeldatanascita).append($inputdatanascita).append($labelclasse).append($inputclasse).append( $buttoniscrizione);
+                $cont.append($labelnome).append($inputnome).append($labelcognome).append($inputcognome).append($labelemail).append($inputemail).append($labelcellulare).append($inputcellulare).append( $buttoniscrizione);
                 $("main .content").append($cont);
-
-
-
-            }else if($(element).parent().is(":nth-child(2)")){
-                //LISTA STUDENTI - La segreteria visualizza la lista degli studenti iscritti
-
-                $cont = $("<div>");
-
-                //bool per controllo fail
-                var assegnfound = true;
-                var rifutfound = true;
-
-                //GET Ajax all'url offerto da server_segreteria per l'ottenimento della lista degli studenti assegnati
-                $.getJSON("/getStudenti/assegnato", (studenti)=>{
-
-                    var $labelstudassegn = $("<ul class='labelstudentiassegnati'>").text("STUDENTI ASSEGNATI");
-                    $cont.append($labelstudassegn);
-                        studenti.forEach((studente)=>{
-
-                            var $listamatricolestud = $("<li class='listamatricolestudenti'>").text("Matricola "+studente.matricola);
-                            var $infoboxstud = $("<li class='infoboxstudente'>").text(studente.nome+" "+studente.cognome+" CF:"+studente.codicefiscale+" Nato il:"+studente.datanascita+" Classe:"+studente.classe);
-                            $cont.append($listamatricolestud).append($infoboxstud);
-                        })
-
-                }).fail((jqXHR)=>{
-                    assegnfound=false;
-                })
-
-                //GET Ajax all'url offerto da server_segreteria per l'ottenimento della lista degli studenti non assegnati
-                $.getJSON("/getStudenti/rigettato", (studenti)=>{
-
-                    var $labelstudrifiut = $("<ul class='labelstudentirifiutati'>").text("STUDENTI NON ASSEGNATI");
-                    $cont.append($labelstudrifiut);
-                        studenti.forEach((studente)=>{
-
-                            var $listamatricolestud = $("<li class='listamatricolestudenti'>").text("Matricola "+studente.matricola);
-                            var $infoboxstud = $("<li class='infoboxstudente'>").text(studente.nome+" "+studente.cognome+" CD:"+studente.codicefiscale+" Nato il:"+studente.datanascita+" Classe:"+studente.classe);
-                            $cont.append($listamatricolestud).append($infoboxstud);
-                        })
-
-                }).fail((jqXHR)=>{
-                    rifiutfound=false;
-                    console.log(assegnfound);
-                    console.log(rifutfound);
-                    //Se la ricerca non trova nulla scrivo un messaggio di errore
-                    if(assegnfound==false && rifutfound==false){
-                        console.log("non trovato");
-                        $cont.append($("<li class='error'>").text("Nessun studente trovato")).hide().fadeIn(800);
-                    }
-                })
-
-                //Append della nostra variabile al content
-                $("main .content").append($cont);
-
-            }else if($(element).parent().is(":nth-child(3)")){
-                //INSERISCI QUADRI - La segreteria inserisce i voti e pubblica le pagelle
-
-                $cont = $("<div>");
-
-                //oggetti html per etichette e inputbox
-                var $labelmatricola=$("<p class='labeltext'>").text("Matricola");
-                var $inputmatricola = $("<input class='inputpagelle' placeholder='Inserisci la matricola dello studente...'>");
                 
-                var $selquad = $("<select class='selezione' name='choice'> <option value='PRIMO QUADRIMESTRE'>Primo Quadrimestre</option> <option value='SECONDO QUADRIMESTRE' selected>Secondo Quadrimestre</option> </select>");
-
-                var $labelanno=$("<p class='labeltext'>").text("Anno Scolastico");
-                var $inputanno = $("<input class='inputpagelle' placeholder='Inserisci Anno Scolastico...'>");
-
-                var $labelita=$("<p class='labeltext'>").text("Voto Italiano");
-                var $inputita = $("<input type='number' id='inputita' name='inputita' min='1' max='10'>");
-                var $labelmat=$("<p class='labeltext'>").text("Voto Matematica");
-                var $inputmat = $("<input type='number' id='inputmat' name='inputmat' min='1' max='10'>");
-                var $labeling=$("<p class='labeltext'>").text("Voto Inglese");
-                var $inputing = $("<input type='number' id='inputing' name='inputing' min='1' max='10'>");
-                var $labelsto=$("<p class='labeltext'>").text("Voto Storia");
-                var $inputsto = $("<input type='number' id='inputsto' name='inputsto' min='1' max='10'>");
-                
-                //Bottone inserimento
-                var $buttonquad = $("<button class='addQuadro btn btn-outline-info'>").text("Aggiungi Quadro");
-                //Listener sul bottone
-                $buttonquad.on("click", ()=>{
-
-                    //Se abbiamo compilato tutto
-                    if($inputmatricola.val()!="" && $selquad.val()!="" && $inputanno.val()!=""  && $inputita.val()!="" && $inputmat.val()!="" && $inputing.val()!="" && $inputsto.val()!=""){
-
-                        //Crea l'oggetto
-                        var el = {studente: {matricola: $inputmatricola.val()}, quadrimestre: $selquad.val(), annoscolastico: $inputanno.val(), materie: {votoitaliano: $inputita.val(), votomatematica: $inputmat.val(), votoinglese: $inputing.val(), votostoria: $inputsto.val()}};
-
-                        //Chiamata AJAX - POST per passare la pagella in formato JSON
-                        $.ajax({
-                            url: "/inserisciPagella",
-                            type:"POST",
-                            dataType:"json",
-                            data:el
-                        }).done(()=>{
-                            //Messaggio di successo per l'inserimento
-                            $("p.notify").text("Quadro inserito con successo!").hide().fadeIn(800).fadeOut(3000);
-                            //Clear input
-                            $inputmatricola.val("");
-                            $inputanno.val("");
-                            $inputita.val("");
-                            $inputmat.val("");
-                            $inputing.val("");
-                            $inputsto.val("");
-                        })
-
-                    }
-                    //Se non sono stati compilati tutti i campi
-                    else{
-                        $("p.notify").text("Compila tutti i campi!").hide().fadeIn(800).fadeOut(3000);
-                    }
-
-                });
-
-                //Listener sul keypress per spostare il focus sul campo successivo
-                $inputmatricola.on("keypress", (event)=>{
-                    if(event.key==="Enter"){
-                        $selquad.focus();
-                    }
-                });
-
-                $selquad.on("keypress", (event)=>{
-                    if(event.key==="Enter"){
-                        $inputanno.focus();
-                    }
-                });
-
-                $inputanno.on("keypress", (event)=>{
-                    if(event.key==="Enter"){
-                        $inputita.focus();
-                    }
-                });
-
-                $inputita.on("keypress", (event)=>{
-                    if(event.key==="Enter"){
-                        $inputmat.focus();
-                    }
-                });
-
-                $inputmat.on("keypress", (event)=>{
-                    if(event.key==="Enter"){
-                        $inputing.focus();
-                    }
-                });
-
-                $inputing.on("keypress", (event)=>{
-                    if(event.key==="Enter"){
-                        $inputsto.focus();
-                    }
-                });
-
-                $inputsto.on("keypress", (event)=>{
-                    if(event.key==="Enter"){
-                        $buttonquad.focus();
-                    }
-                });
-
-                //appendo i vari elementi html creati
-                $cont.append($labelmatricola).append($inputmatricola).append($selquad).append($labelanno).append($inputanno).append($labelita).append($inputita).append($labelmat).append($inputmat).append($labeling).append($inputing).append($labelsto).append($inputsto).append($buttonquad);
-
-                $("main .content").append($cont);
 
             }else if($(element).parent().is(":nth-child(4)")){
-                //VISUALIZZA QUADRI - La segreteria visualizza i quadri che ha pubblicato
-
-                $cont = $("<ul>");
-                
-                //GET Ajax all'url offerto da server_segreteria per l'ottenimento della lista di quadri
-                $.getJSON("/getPagelle", (pagelle)=>{
-
-                    pagelle.forEach((pagella)=>{
-
-                        var $listidpagelle = $("<li class='listidpagella'>").text("ID Pagella: "+pagella.id);
-                        var $infopagella = $("<li class='infopagella'>").text("Matricola: "+pagella.studente.matricola+" - "+pagella.quadrimestre+" quadrimestre - Anno scolastico: "+pagella.annoscolastico);
-                        var $votoita = $("<li class='listvotoita'>").text("Italiano: "+pagella.materie.votoitaliano);
-                        var $votomat = $("<li class='listvotomat'>").text("Matematica: "+pagella.materie.votomatematica);
-                        var $votoing = $("<li class='listvotoing'>").text("Inglese: "+pagella.materie.votoinglese);
-                        var $votosto = $("<li class='listvotosto'>").text("Storia: "+pagella.materie.votostoria);
-
-                        $cont.append($listidpagelle).append($infopagella).append($votoita).append($votomat).append($votoing).append($votosto);
-                    })
-                    
-                }).fail((jqXHR)=>{
-                    $cont.append($("<li class='error'>").text("Nessun quadro trovato!"));
-                })
-
-                //Append elementi html al content
-                $("main .content").append($cont);
-
-            }else if($(element).parent().is(":nth-child(5)")){
-                //INSERISCI ATTIVITA' - La segreteria pubblica le attività tramite questo tab
+                //LISTA ISTRUTTORI - La segreteria visualizza la lista degli istruttori della scuola guida
 
                 $cont = $("<div>");
 
-                //Label e input box html per riempire i vari campi
-                var $labeldata = $("<p class='labeltext'>").text("Data");
-                var $inputdata = $("<input class='calendar' type='date'>");
+                //GET Ajax all'URL offerto da server_segreteria per l'ottenimento della lista degli studenti assegnati
+                $.getJSON("/getIstruttori", (istruttori)=>{
 
-                var $selezionetipo = $("<select class= 'selezione' name='choice'> <option value='ISTITUTO' selected>Istituto</option> <option value='CLASSE'>Classe</option> </select>");
+                    var $labelistr = $("<ul class='labelistruttori'>").text("ISTRUTTORI");
+                    $cont.append($labelistr);
+                        istruttori.forEach((istruttore)=>{
 
-                var $labeldesc = $("<p class='labeltext'>").text("Descrizione");
-                var $tbox = $("<textarea class = 'textbox' placeholder='Inserisci descrizione attività...'>");
+                            var $infoboxistr = $("<li class='infoboxistruttore'>").text(istruttore.nome+" "+istruttore.cognome+"  Nato il:"+istruttore.datanascita+" cellulare:"+sistruttore.cellulare+" \n email:"+istruttore.email);
 
-                var $buttonattivita = $("<button class ='publish btn btn-outline-info'>").text("Pubblica");
-
-                //Aggiungo il listener al click del bottone
-                $buttonattivita.on("click", ()=>{
-
-                    //Controllo che siano stati compilati i vari campi
-                    if($inputdata.val()!="" && $tbox.val()!=""){
-
-                        //Creo l'oggetto attivita
-                        var el = {data: $inputdata.val(), tipo: $selezionetipo.val(), descrizione: $tbox.val()};
-
-                        //Chiamata AJAX - POST
-                        $.ajax({
-                            url: "/inserisciAttivita",
-                            type: "POST",
-                            dataType: "json",
-                            data:el
-                        }).done(()=>{
-                            //Messaggio di pubblicazione avvenuta
-                            $("p.notify").text("Attività pubblicata!").hide().fadeIn(800).fadeOut(3000);
-                            //Clear degli inputbox
-                            $inputdata.val("");
-                            $tbox.val("");
+                            $cont.append($infoboxistr);
                         })
 
-                    }else{//Se non sono stati compilati tutti i campi
-                        $("p.notify").text("Compila tutti i campi!").hide().fadeIn(800).fadeOut(3000);
-                    }
-
-                });
-
-                //Listener sul keypress per spostare il focus all'inserimento del campo successivo
-                $inputdata.on("keypress", (event)=>{
-                    if(event.key==="Enter"){
-                        $selezionetipo.focus();
-                    }
-                });
-
-                $selezionetipo.on("keypress", (event)=>{
-                    if(event.key==="Enter"){
-                        $tbox.focus();
-                    }
-                });
-
-                $tbox.on("keypress", (event)=>{
-                    if(event.key==="Enter"){
-                        $buttonattivita.focus();
-                    }
-                });
-
-                $cont.append($labeldata).append($inputdata).append($selezionetipo).append($labeldesc).append($tbox).append($buttonattivita);
-
+                }).fail((jqXHR)=>{
+                    $(".notify").text(" Nessun istruttore trovato! ").hide().fadeIn(800).fadeOut(3000);
+                })
+                //Append della nostra variabile al content
                 $("main .content").append($cont);
+            
+
+            }else if($(element).parent().is(":nth-child(5)")){
+
+                 //GESTISCI CORSI - La segreteria inserisce nuovi corsi nel sistema
+                
+                 $cont=$("<div>");
+
+                 //Label e input box per i campi da riempire
+                 var $labelpatente=$("<p class='labeltext'>").text("Patente");
+                 var $selquad = $("<select class='selezione' name='choice'> <option value='Autoveicolo'>Autoveicolo</option> <option value='Motociclo' selected>Motociclo</option> </select>");
+                 var $selpatente = $("<select class='selezione' name='choice'> <option value='AM'>AM</option> <option value='A1' selected>A1</option> <option value='A2' selected>A2</option> <option value='A' selected>A</option> <option value='B' selected>B</option>  </select>");
+
+                 var $labeldescrizione=$("<p class='labeltext'>").text("descrizione");
+                 var $inputdescrizione=$("<input class='textbox' placeholder='Inserisci una descrizione ...'>");
+ 
+                 var $buttoncreazione=$("<button class='subscribe btn btn-outline-info'>").text("Crea");
+ 
+                 //Aggiungo un listener sul click del bottone
+                 $buttoncreazione.on("click",function(){
+ 
+                     //Sono stati compilati tutti i campi?
+                     if($inputdescrizione.val()!="" && ($selquad==Autoveicolo && $selpatente==B) && ($selquad==Motociclo && $selpatente!=B)  && ($selquad!=Motociclo && $selpatente==B) ){
+ 
+                         //Sì,tutto compilato
+                         //Creo l'oggetto studente
+                         var cor={patente: {$selquad, $selpatente}, 
+                             descrizione: $inputdescrizione.val()
+                         }
+ 
+                         //Chiamata AJAX - POST per inviare l'iscrizione
+ 
+                         $.ajax({
+                             url: "/inserisciCorsi",
+                             type:"POST",
+                             dataType:"json",
+                             data:cor
+                         }).done(function(){
+                             //Inserimento avvenuto con successo
+                             $("p.notify").text("Corso creato").hide().fadeIn(800).fadeOut(3000);
+                             $inputdescrizione.val("");
+                         })
+ 
+                         $(".tabs a:first-child span").trigger("click");
+ 
+                     }else{
+                         //No, non tutti i campi sono stati compilati
+                         $("p.notify").text("Compila correttamente tutti i campi!").hide().fadeIn(800).fadeOut(3000);
+                     }
+                 });
+ 
+                 $inputdescrizione.on("keypress",function(event){
+                     if(event.key=="Enter")
+                     $buttoncreazione.focus();
+                 });
+ 
+                 //append degli elemnti html
+                 $cont.append($labelpatente)
+                        .append($selquad)
+                        .append($selpatente)
+                        .append($labeldescrizione)
+                        .append($inputdescrizione)
+                        .append($buttoncreazione);
+                        
+                 $("main .content").append($cont);
+                
 
             }else if($(element).parent().is(":nth-child(6)")){
-                //GESTISCI ATTIVITA' - La segreteria visualizza tutte le attività pubblicate e può eliminarle
+                //VISUALIZZA CORSI - La segreteria visualizza la lista dei corsi della scuola guida
+                //TODO: Elimina corso
 
-                $cont=$("<ul>");
+                $cont = $("<div>");
 
-                //GET per ottenere l'array di attività
-                $.getJSON("/getAttivita", (activities)=>{
+                //GET Ajax all'URL offerto da server_segreteria per l'ottenimento della lista degli studenti assegnati
+                $.getJSON("/getCorsi", (corsi)=>{
 
-                    //Scorro l'array di attività
-                    activities.forEach((attivita)=>{
+                    var $labelcor = $("<ul class='labelcorsi'>").text("CORSI");
+                    $cont.append($labelcor);
+                        corsi.forEach((corso)=>{
 
-                        //Bottone per l'eliminazione dell'attività, con dentro l'id univoco dell'attività da eliminare
-                        var $button = $("<button class='deleteactivity btn btn-outline-danger' id='"+attivita.idatt+"'>").text("Elimina");
-                        //div con display flex per lo spazio tra i bottoni
-                        var $div = $("<div class='d-flex gap-2'>")
-                        //Descrizione dell'attività
-                        var $actdesc = $("<li class='attivitadesc'>").text(attivita.descrizione);
-                        //Appendo il tipo della news per differenziarle e lo scrivo insieme alla data
-                        $cont.append($("<li class='"+attivita.tipo.toString().toLowerCase()+"'>").text(attivita.tipo+" "+attivita.data));
+                            var $infoboxcor = $("<li class='infoboxcorso'>").text(corso.id+"- Corso per la patente "+corso.patente+" \n "+corso.descrizione);
 
-                        //Appendo il resto degli elementi html
-                        $div.append($actdesc).append($button);
-                        $cont.append($div);
-
-                    });
-
-                    //Selezioni i bottoni di eliminazione
-                    document.querySelectorAll('button.deleteactivity').forEach((bottone)=>{
-
-                        //Listener del click del bottone
-                        bottone.addEventListener("click", (e)=>{
-
-                            //Oggetto in cui salvo l'id dell'attività da cancellare
-                            var el={idatt:e.target.getAttribute('id')}
-                            console.log(el);
-
-                            //DELETE Ajax
-                            $.ajax({
-                                url:"/deleteAttivita",
-                                type:"DELETE",
-                                dataType:"json",
-                                data:el
-                            }).done(()=>{
-                                //Se l'operazione va a buon fine refresho la paggina e manndo un messaggio di successo
-                                $(".tabs a:nth-child(6) span").trigger("click");
-                                $(".notify").text("Attività eliminata con successo!").hide().fadeIn(800).fadeOut(3000);
-                            }).fail((jqXHR)=>{
-                                //Se fallisce mando un messaggio di errore
-                                $(".notify").text("Attività non eliminata!").hide().fadeIn(800).fadeOut(3000);
-                            })
-
-                        });
-
-                    });
+                            $cont.append($infoboxcor);
+                        })
 
                 }).fail((jqXHR)=>{
-                    //Fail nella ricerca delle attività -> messaggio di errore
-                    $cont.append($("<li class='error'>").text("Non sono state trovate attività!")).hide().fadeIn(800).fadeOut(3000);
-                });
-
+                    $(".notify").text(" Nessun corso trovato! ").hide().fadeIn(800).fadeOut(3000);
+                })
+                //Append della nostra variabile al content
                 $("main .content").append($cont);
-
+                
+            
             }
 
             return false; //Evita la ripropagazione del click sui tabs
@@ -448,55 +386,9 @@ var main = function(){
 
 }
 
-//Funzione per la notifica di una nuova iscrizione
-var check = function(firstcall){
 
-    //GET Ajax delle iscrizioni in attesa
-    $.getJSON("/getStudenti/attesa", (iscrizioni)=>{
-
-        //Se è la prima chiamata alla funzione, pongo il contatore di iscrizioni pari alla lunghezza dell'array di iscrizioni
-        if(firstcall){
-
-            num_iscrizioni=iscrizioni.length;
-
-        }else if(num_iscrizioni!=iscrizioni.length){
-
-            //Se il contatore è cambiato invio la notifica
-            num_iscrizioni=iscrizioni.length;
-            var el = document.querySelector(".active");
-
-            //Se mi trovo già sul primo tab triggero il click fittiziamente
-            if(el.getAttribute("id")=="gestiscistudentitab"){
-                $(el).trigger("click");
-                $(".alert").text("Nuova modifica alle iscrizioni");
-                $(".alert").on("click",()=>{
-                    $(".alert").text("");
-                })
-
-            }else{
-                //Se invece mi trovo su un'altro tab notifico la modifica
-                $(".alert").text("Aggiornate le richieste di iscrizione");
-                $(".alert").on("click", ()=>{
-
-                    $(".alert").text("");
-    
-
-                });
-
-            }
-
-        }
-
-    });
-
-}
-
-//Avvio del main e della funzione di notifica (passo alla prima call true)
-
+//Avvio del main 
 $(document).ready(()=>{
-    main(check(true));
+    main();
 });
 
-setInterval(()=>{
-    check(false);
-}, 1000);
