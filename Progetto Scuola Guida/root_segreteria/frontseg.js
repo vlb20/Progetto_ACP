@@ -44,7 +44,7 @@ var main = function(){
 
                 //Per le patenti implemento una selezione
                 var $labelpatente=$("<p class='labeltext'>").text("Patente");
-                var $selquad = $("<select class='selezione' name='choice'> <option value='Autoveicolo'>Autoveicolo</option> <option value='Motociclo' selected>Motociclo</option> </select>");
+                var $selquad = $("<select class='selezione' name='choice'> <option value='Autoveicolo' selected>Autoveicolo</option> <option value='Motociclo' >Motociclo</option> </select>");
                 var $selpatente = $("<select class='selezione' name='choice'> <option value='AM'>AM</option> <option value='A1' selected>A1</option> <option value='A2' selected>A2</option> <option value='A' selected>A</option> <option value='B' selected>B</option>  </select>");
 
                 var $labelpatentiinpossesso=$("<p class='labeltext'>").text("Patenti già in possesso");
@@ -78,7 +78,7 @@ var main = function(){
                 $buttoniscrizione.on("click",function(){
 
                     //Sono stati compilati tutti i campi?
-                    if($inputnome.val()!="" && $inputcognome.val()!="" && $inputemail.val()!="" && $inputdatanascita.val()!="" && $inputcellulare.val()!="" && ($selquad==Autoveicolo && $selpatente==B) && ($selquad==Motociclo && $selpatente!=B)  && ($selquad!=Motociclo && $selpatente==B)){
+                    if($inputnome.val()!="" && $inputcognome.val()!="" && $inputemail.val()!="" && $inputdatanascita.val()!="" && $inputcellulare.val()!=""){
 
                         //Sì,tutto compilato
                         //Creo l'oggetto studente
@@ -87,7 +87,7 @@ var main = function(){
                             datanascita: $inputdatanascita.val(),
                             email: $inputemail.val(),
                             cellulare: $inputcellulare.val(),
-                            patente: {$selquad, $selpatente},
+                            patente: {type: $selquad.val(), enum: $selpatente.val()},
                             patentiinpossesso: selezioni
                         }
 
@@ -110,7 +110,7 @@ var main = function(){
 
                         $(".tabs a:first-child span").trigger("click");
 
-                    }else if(($selquad!=Autoveicolo && $selpatente==B) && ($selquad==Autoveicolo && $selpatente!=B) ){
+                    }else if(($selquad.val()!="Autoveicolo" && $selpatente.val()=="B") && ($selquad.val()=="Autoveicolo" && $selpatente.val()!="B") ){
                         //Selezione non valida della patente
                         $("p.notify").text("Selezione patente non valida!").hide().fadeIn(800).fadeOut(3000);
                     
@@ -304,11 +304,11 @@ var main = function(){
                  $buttoncreazione.on("click",function(){
  
                      //Sono stati compilati tutti i campi?
-                     if($inputdescrizione.val()!="" && ($selquad==Autoveicolo && $selpatente==B) && ($selquad==Motociclo && $selpatente!=B)  && ($selquad!=Motociclo && $selpatente==B) ){
+                     if($inputdescrizione.val()!="" && ($selquad.val()=="Autoveicolo" && $selpatente.val()=="B") && ($selquad.val()=="Motociclo" && $selpatente.val()!="B")  && ($selquad.val()!="Motociclo" && $selpatente.val()=="B") ){
  
                          //Sì,tutto compilato
                          //Creo l'oggetto studente
-                         var cor={patente: {$selquad, $selpatente}, 
+                         var cor={patente: {type:$selquad.val(), enum:$selpatente.val()}, 
                              descrizione: $inputdescrizione.val()
                          }
  
@@ -345,15 +345,14 @@ var main = function(){
                         .append($labeldescrizione)
                         .append($inputdescrizione)
                         .append($buttoncreazione);
-                        
+
                  $("main .content").append($cont);
                 
 
             }else if($(element).parent().is(":nth-child(6)")){
                 //VISUALIZZA CORSI - La segreteria visualizza la lista dei corsi della scuola guida
-                //TODO: Elimina corso
 
-                $cont = $("<div>");
+                $cont = $("<ul>");
 
                 //GET Ajax all'URL offerto da server_segreteria per l'ottenimento della lista degli studenti assegnati
                 $.getJSON("/getCorsi", (corsi)=>{
@@ -362,10 +361,46 @@ var main = function(){
                     $cont.append($labelcor);
                         corsi.forEach((corso)=>{
 
+                            //Bottone per l'eliminazione del corso, con dentro l'id univoco del corso da eliminare
+                            var $button = $("<button class='deletecourse btn btn-outline-danger' id='"+corso.id+"'>").text("Elimina");
+                            //div con display flex per lo spazio tra i bottoni
+                            var $div = $("<div class='d-flex gap-2'>")
+                            //Descrizione dell'attività
                             var $infoboxcor = $("<li class='infoboxcorso'>").text(corso.id+"- Corso per la patente "+corso.patente+" \n "+corso.descrizione);
 
-                            $cont.append($infoboxcor);
-                        })
+                            $div.append($infoboxcor).append($button);
+                            $cont.append($div);
+
+                        });
+
+                        //Selezioni i bottoni di eliminazione
+                    document.querySelectorAll('button.deleteactivity').forEach((bottone)=>{
+
+                        //Listener del click del bottone
+                        bottone.addEventListener("click", (e)=>{
+
+                            //Oggetto in cui salvo l'id dell'attività da cancellare
+                            var el={idatt:e.target.getAttribute('id')}
+                            console.log(el);
+
+                            //DELETE Ajax
+                            $.ajax({
+                                url:"/deleteCorso",
+                                type:"DELETE",
+                                dataType:"json",
+                                data:el
+                            }).done(()=>{
+                                //Se l'operazione va a buon fine refresho la paggina e manndo un messaggio di successo
+                                $(".tabs a:nth-child(6) span").trigger("click");
+                                $(".notify").text("Corso eliminato!").hide().fadeIn(800).fadeOut(3000);
+                            }).fail((jqXHR)=>{
+                                //Se fallisce mando un messaggio di errore
+                                $(".notify").text("L'operazione non e' andata a buon fine!").hide().fadeIn(800).fadeOut(3000);
+                            })
+
+                        });
+
+                    });
 
                 }).fail((jqXHR)=>{
                     $(".notify").text(" Nessun corso trovato! ").hide().fadeIn(800).fadeOut(3000);
