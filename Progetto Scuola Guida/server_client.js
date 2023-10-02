@@ -72,7 +72,8 @@ var corsiScheme = mongoose.Schema({
         type: [String],
         enum: ["AM", "A1", "A2","A","B"],
         default: 'B'
-    }
+    },
+    descrizione: String
 
 })
 
