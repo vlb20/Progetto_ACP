@@ -174,9 +174,22 @@ main .content p {
     text-transform: uppercase;
 }
 
-/* AREA GESTISCI STUDENTI */
-li.labelstatoiscr{
-    background-color: #082B59;
+
+
+/*AREA PERSONALE*/
+
+li.infostudente{
+    color:#000000;
+    font-size: larger;
+    letter-spacing: .11em;
+    margin: 8px;
+    margin-right: 20px;
+    padding: 7px;
+    width: fit-content;
+}
+
+li.labelstudente{
+    background-color: #940707;
     color:#ffffff;
     padding: 6px;
     text-indent: 10px;
@@ -185,51 +198,6 @@ li.labelstatoiscr{
     width: fit-content;
     margin-top: 15px;
     margin-bottom: 10px;
-}
-
-/*AREA LISTA STUDENTI*/
-ul.labelstudentiassegnati{
-    background-color: #0cec0c;
-    color:#F5F5F5;
-    padding: 6px;
-    text-indent: 10px;
-    text-align: center;
-    font-weight: bold;
-    width: fit-content;
-    margin-bottom: 10px;
-    margin-top: 15px;
-}
-
-ul.labelstudentirifiutati{
-    background-color: #e01e1e;
-    color:#F5F5F5;
-    padding: 6px;
-    text-indent: 10px;
-    text-align: center;
-    font-weight: bold;
-    width: fit-content;
-    margin-top: 15px;
-    margin-bottom: 10px;
-}
-
-li.listamatricolestudenti{
-    margin: 8px;
-    margin-right: 20px;
-    padding: 7px;
-    width: fit-content;
-    background-color: #082B59;
-    color:#F5F5F5;
-    letter-spacing: .11em;
-}
-
-li.infoboxstudente{
-    color:#fffdfd;
-    letter-spacing: .11em;
-    margin: 8px;
-    margin-right: 20px;
-    padding: 7px;
-    width: fit-content;
-    background-color: #082B59;
 }
 
 /*AREA INSERISCI QUADRI*/

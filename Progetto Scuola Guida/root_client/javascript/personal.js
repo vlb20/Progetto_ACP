@@ -41,8 +41,19 @@ var main=function(){
                             $.getJSON("/getStudenti/"+response.username, (iscrizioni)=>{
 
                                 iscrizioni.forEach((iscrizione)=>{
-                                    var $infostud = $("<li class='infostudente'>").text(iscrizione.nome+" "+iscrizione.cognome+" Nato il "+iscrizione.datanascita+"\nEmail: "+iscrizione.email+" - Cellulare: "+iscrizione.cellulare+"\nIscritto al corso di: "+iscrizione.patente.type+" "+iscrizione.patente.enum+"\nPatenti già in possesso:");
-                                    $cont.append($infostud);
+                                    var $infonome = $("<li class='infostudente'>").text(iscrizione.nome+" "+iscrizione.cognome);
+                                    var $labeldata = $("<li class='labelstudente'>").text("Data di nascita: ");
+                                    var $infodata = $("<li class='infostudente'>").text(iscrizione.datanascita);
+                                    var $labelemail = $("<li class='labelstudente'>").text("Email: ");
+                                    var $infoemail = $("<li class='infostudente'>").text(iscrizione.email);
+                                    var $labelcellulare = $("<li class='labelstudente'>").text("Cellulare: ");
+                                    var $infocellulare = $("<li class='infostudente'>").text(iscrizione.cellulare);
+                                    var $labelcorso = $("<li class='labelstudente'>").text("Iscritto al corso per la Patente: ");
+                                    var $infocorso = $("<li class='infostudente'>").text(iscrizione.patente);
+                                    var $labelpatenti = $("<li class='labelstudente'>").text("Patenti già in possesso: ");
+                                    var $infopatenti = $("<li class='infostudente'>").text(iscrizione.patentiinpossesso)
+
+                                    $cont.append($infonome).append($labeldata).append($infodata).append($labelemail).append($infoemail).append($labelcellulare).append($infocellulare).append($labelcorso).append($infocorso).append($labelpatenti).append($infopatenti);
                                 })
 
                             }).fail((jqXHR)=>{
@@ -95,7 +106,6 @@ var main=function(){
             }else if($element.parent().is(":nth-child(3)")){//TAB SIMULAZIONE DOMANDE
 
                 $cont=$("<ul>");
-
 
                 //GET per ottenere l'array di domande
                 $.getJSON("/getDomande", (domande)=>{
