@@ -124,7 +124,7 @@ var istruttoriScheme = mongoose.Schema({
 //sistema per “accettare” le prenotazioni richieste dai clienti.
 var prenotazioniScheme = mongoose.Schema({
     id: Number,
-    studente: {String}, //username
+    studente: String, //username
     idIstruttore: Number,
     stato:{
         type: [String],
@@ -376,7 +376,7 @@ app.get("/getCorsi",(req,res)=>{
 app.post("/creaPrenotazione",(req,res)=>{
 
     //Creazione
-    var newpren = new Prenotazione({id:Number(++idprenotazioni), studente: req.body.studente, istruttore:req.body.istruttore, giorno:req.body.giorno, orario:req.body.orario});
+    var newpren = new Prenotazione({id:Number(++idprenotazioni), studente: req.body.studente, idIstruttore:req.body.idIstruttore, giorno:req.body.giorno, orario:req.body.orario});
     newpren.save().then(()=>{
         res.status(200).json(newpren);
     })

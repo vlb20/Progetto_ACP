@@ -159,7 +159,7 @@ var main=function(){
                             //Label e input box per i campi da riempire
 
                             var $labelistruttore=$("<p class='labeltext'>").text("ID Istruttore");
-                            var $inputistruttore=$("<input type='number' id='inputmat' name='inputmat' min='1'>");
+                            var $inputistruttore=$("<input type='number' id='inputIstruttore' name='inputIstruttore' min='1'>");
 
                             var $labeldata = $("<p class='labeltext'>").text("Data");
                             var $inputdata = $("<input class='calendar' type='date'>");
