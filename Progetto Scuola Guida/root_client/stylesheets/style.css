@@ -317,20 +317,35 @@ p.notify {
 
 
 /* AREA FOOTER */
+footer {
+    width: 100%;
+    height: auto;
+    padding: 20px;
 
-footer .container {
     display: flex;
+    justify-content: center;
     align-items: center;
-    flex-wrap: wrap;
-    flex-direction: row;
-    justify-content: space-around;
+    flex-direction: column;
 
+    background-color: #bd9f27;
+    color: white;
+    border-top: 1px solid black;
 }
 
-.infobox {
-    background-color: #bd9f27;
-    padding: 10px;
-    text-align: center;
+.contacts {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.contact-icons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+}
+
+.contact-icons a img {
+    width: 50px;
 }
 
 .quotes {
@@ -338,9 +353,10 @@ footer .container {
     padding: 10px;
 }
 
-.infobox p {
-    padding: 5px;
-    color: #F5F5F5;
+.footer-description {
+    padding-top: 20px;
+    font-size: 20px;
+    text-align: center;
 }
 
 .quotes li, .infobox li {
@@ -351,8 +367,16 @@ footer .container {
 footer h5 {
     font-weight: bold;
     font-size: 18px;
-    color: #082B59;
+    color: #ffffff;
     text-transform: uppercase;
     margin-top: 8px;
     margin-bottom: 5px;
+}
+
+@media screen and (max-width: 992px){
+    
+}
+
+@media screen and (max-width: 600px){
+    
 }
