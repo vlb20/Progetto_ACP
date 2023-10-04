@@ -19,7 +19,7 @@ li{
 
 body {
     margin: 0px;
-    background-color: #082B59;
+    background-color: #936c00;
 }
 
 header{
@@ -77,7 +77,7 @@ html {
 }
 
 ::selection {
-    background-color: #c5cd2c;
+    background-color: #ff3301;
 }
 
 button:hover {
@@ -140,7 +140,7 @@ main .container {
 /* AREA MAIN */
 
 main .content {
-    background-color: #e2e8e9;
+    background-color: #ffffff;
     padding: 20px 0px 20px 20px;
     text-align: left;
     word-wrap: break-word;
@@ -200,125 +200,101 @@ li.labelstudente{
     margin-bottom: 10px;
 }
 
-/*AREA INSERISCI QUADRI*/
 
-button.addQuadro{
-    margin-left:20px;
-    border-color: #082B59;
-}
 
-select[name="choice"]{
-    margin-left:10px;
-}
+/* AREA VISUALIZZA ISTRUTTORI */
 
-.labeltext{
-    background-color: #082B59;
-    color:#F5F5F5;
+li.listidistruttore{
+    background-color: #940707;
+    color:#ffffff;
     padding: 6px;
     text-indent: 10px;
     text-align: center;
-    width: 300px;
     font-weight: bold;
-    margin-top: 10px;
+    width: fit-content;
+    margin-top: 15px;
+    margin-bottom: 10px;
 }
 
-button.btn-outline-info {
-    color:#082B59 !important;
-    border-color: #082B59;
-}
-
-/*AREA VISUALIZZA QUADRI*/
-li.listidpagella{
-    background-color: #082B59;
-    color: #F5F5F5;
-    text-indent: 10px;
-    text-align: center;
-    width: 200px;
-    font-weight: bold;
-}
-
-li.infopagella{
-    background-color: #082B59;
-    color: #F5F5F5;
-    text-indent: 10px;
-    text-align: left;
-    width: 950px;
-}
-
-li.listvotoita{
-    background-color: #bd9f27;
-    color: #f0f0f0;
-    text-indent: 10px;
-    text-align: left;
-    width: 200px;
-}
-
-li.listvotomat{
-    background-color: #ffffff;
-    color: #000000;
-    text-indent: 10px;
-    text-align: left;
-    width: 200px;
-}
-
-li.listvotoing{
-    background-color: #bd9f27;
-    color: #f0f0f0;
-    text-indent: 10px;
-    text-align: left;
-    width: 200px;
-}
-
-li.listvotosto{
-    background-color: #ffffff;
-    color: #000000;
-    text-indent: 10px;
-    text-align: left;
-    width: 200px;
-}
-
-/*AREA INSERISCI ATTIVITA'*/
-button.publish{
-    margin-left:20px;
-    transform: translateY(-30%);
-}
-
-/*AREA GESTISCI ATTIVITA'*/
-li.istituto{
-    background-color: #082B59;
-    color:#F5F5F5;
-    padding: 6px;
-    text-indent: 10px;
-    text-align: center;
-    width: 300px;
-    font-weight: bold;
-    margin-top: 10px;
-}
-
-li.classe{
-    background-color: #bd9f27;
-    color:#F5F5F5;
-    padding: 6px;
-    text-indent: 10px;
-    text-align: center;
-    width: 300px;
-    font-weight: bold;
-    margin-top: 10px;
-}
-
-li.attivitadesc{
+li.infoistruttore{
+    color:#000000;
+    font-size: larger;
+    letter-spacing: .11em;
     margin: 8px;
     margin-right: 20px;
     padding: 7px;
     width: fit-content;
-    background-color: gold;
-    letter-spacing: .11em;
 }
 
-button.deleteactivity{
-    margin-right:15px;
-    align-self:center;
+/* AREA PRENOTAZIONE LEZIONI */
+
+p.labeltext{
+    background-color: #940707;
+    color:#ffffff;
+    padding: 6px;
+    text-indent: 10px;
+    text-align: center;
+    font-weight: bold;
+    width: fit-content;
+    margin-top: 15px;
+    margin-bottom: 10px;
 }
+
+button.prenota{
+    margin-left:20px;
+    transform: translateY(10%);
+    color: #940707;
+    outline-color: #940707;
+    border-color: #940707;
+}
+
+/* AREA GESTISCI PRENOTAZIONI */
+li.attesa{
+    background-color: #bd9f27;
+    color:#ffffff;
+    padding: 6px;
+    text-indent: 10px;
+    text-align: center;
+    font-weight: bold;
+    width: fit-content;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+li.accettata{
+    background-color: #099e18;
+    color:#ffffff;
+    padding: 6px;
+    text-indent: 10px;
+    text-align: center;
+    font-weight: bold;
+    width: fit-content;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+li.rifiutata{
+    background-color: #fb3600;
+    color:#ffffff;
+    padding: 6px;
+    text-indent: 10px;
+    text-align: center;
+    font-weight: bold;
+    width: fit-content;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+li.infopren{
+    color:#000000;
+    font-size: larger;
+    letter-spacing: .11em;
+    margin: 8px;
+    margin-right: 20px;
+    padding: 7px;
+    width: fit-content;
+}
+
 
 /*AREA ALERT E NOTIFY */
 

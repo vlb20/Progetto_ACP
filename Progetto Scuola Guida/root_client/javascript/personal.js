@@ -269,7 +269,8 @@ var main=function(){
                                     //div con display flex per lo spazio tra i bottoni
                                     var $div = $("<div class='d-flex gap-2'>")
                                     //Info prenotazione
-                                    var $infopren = $("<li class='infopren'>").text("Istruttore #: "+prenotazione.idIstruttore+"- Giorno: "+prenotazione.giorno+"- Orario: "+prenotazione.orario);
+                                    
+                                    var $infopren = $("<li class='infopren'>").text("Istruttore n°: "+prenotazione.idIstruttore+" - Giorno: "+prenotazione.giorno+"- Orario: "+prenotazione.orario);
                                     //Appendo lo stato della prenotazione per differenziarle
                                     $cont.append($("<li class='"+prenotazione.stato.toString().toLowerCase()+"'>").text(prenotazione.stato));
 
