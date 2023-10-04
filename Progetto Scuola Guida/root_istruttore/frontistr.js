@@ -187,7 +187,7 @@ var main = function(){
                         })
 
                 }).fail((jqXHR)=>{
-                    $(".notify").text(" Nessun corso trovato! ").hide().fadeIn(800);
+                    $(".notify").text(" Nessun corso trovato! ").hide().fadeIn(300);
                 })
 
                 
