@@ -406,7 +406,7 @@ app.get("/getPrenotazioni/:studente",(req,res)=>{
 app.delete("/deletePrenotazione",(req,res)=>{
 
     //Cerchiamo l'attività da eliminare
-    Corso.findOneAndDelete(req.body).then((cancella)=>{
+    Prenotazione.findOneAndDelete(req.body).then((cancella)=>{
         //cancella ha funzionato?
         if(cancella!=null){
             //Sì,ack
