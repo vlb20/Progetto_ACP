@@ -38,13 +38,7 @@ var studentiScheme = mongoose.Schema({
         enum: ["AM", "A1", "A2","A","B"],
         default: 'B'
     },
-    patentiinpossesso: {
-        AM: Boolean,
-        A1: Boolean,
-        A2: Boolean,
-        A: Boolean,
-        B: Boolean
-    },
+    patentiinpossesso: String,
     username: String,
     password: String
 
