@@ -146,6 +146,8 @@ var Domanda=domande.model("Domanda",domandeScheme);
 
 var idprenotazioni=0;
 
+// Calcola l'ID massimo delle prenotazioni esistenti nel database
+// per garantire che ogni nuova prenotazione abbia un ID univoco.
 Prenotazione.find({}).then((result)=>{
     var max=-1;
     result.forEach(element => {
@@ -172,19 +174,19 @@ app.get("/login", (req, res) => {
 // POST: login utente
 app.post('/login/log', (req, res) => {
 
-    // Read email and password from request's body
+    // Legge l'username e la password dal body della request
     var {username, password} = req.body;
 
-    // Prepare query
+    // Preparo la query
     const query = { username: username };
 
-    // Find the user (at maximum one) with the specified email
+    // Trova l'unico studente con quello specifico username
     Studente.find(query)
     .then((iscrizioni) => {
 
-        //Nessuna iscrizione trovata
+        //Nessuno studente trovato
         if (iscrizioni == []) {
-            console.log('\t\t\t[SERVER]: username non valido.');
+            console.log('[SERVER]: username non valido.');
         }
 
         //Se invece l'username corrisponde
@@ -250,7 +252,7 @@ app.get('/autenticazioneAvvenuta', (req, res) => {
 
 //GESTIONE STUDENTI
 
-//GET: Visualizza Studenti
+//GET: Visualizza le informazioni dello studente in base all'username
 app.get("/getStudenti/:username",(req,res)=>{
 
     //Raccolgo l'iscrizione dal database
@@ -295,7 +297,10 @@ app.get("/getIstruttori",(req,res)=>{
 //GET: Visualizza Domande
 app.get("/getDomande",(req,res)=>{
 
-    //Raccolgo le domande dal database
+    /*Raccolgo le domande dal database ->  verranno prelevate casualmente 40 domande dalla collezione
+     * $sample: È un operatore di aggregazione specifico che viene utilizzato per estrarre un campione casuale di documenti dalla collezione.
+     * L'operatore $sample richiede un oggetto di configurazione con il campo size, che specifica il numero di documenti da estrarre casualmente.
+     */
     Domanda.aggregate([{ $sample: { size: 40 } }]).then((domande)=>{
 
         //Ci sono delle doamnde?
