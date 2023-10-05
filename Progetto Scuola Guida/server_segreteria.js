@@ -13,7 +13,7 @@ app.use(express.static(__dirname+"/root_segreteria")) //Setta la root di base al
 
 
 //Creazione del database MongoDB
-const studenti = mongoose.createConnection("mongodb://127.0.0.1:27017/MyAutoscuola") //Creo una connessione con il database per l'istanza studenti
+const studenti = mongoose.createConnection("mongodb://127.0.0.1:27017/Studenti") //Creo una connessione con il database per l'istanza studenti
 const corsi = mongoose.createConnection("mongodb://127.0.0.1:27017/Corsi")
 const istruttori = mongoose.createConnection("mongodb://127.0.0.1:27017/Istruttori")
 const prenotazioni = mongoose.createConnection("mongodb://127.0.0.1:27017/Prenotazioni")
@@ -38,13 +38,7 @@ var studentiScheme = mongoose.Schema({
         enum: ["AM", "A1", "A2","A","B"],
         default: 'B'
     },
-    patentiinpossesso: {
-        AM: Boolean,
-        A1: Boolean,
-        A2: Boolean,
-        A: Boolean,
-        B: Boolean
-    },
+    patentiinpossesso: String,
     username: String,
     password: String
 
@@ -112,31 +106,29 @@ var Domanda=domande.model("Domanda",domandeScheme);
 
 
 //Creiamo il vettore degli studenti iscritti
-var idstudenti=0;
-
-Studente.find({}).then((result)=>{
-    var max=-1;
-    result.forEach(element => {
-        if(element.idstudenti>max){
-            max=element.idstudenti;
-        }
-    });
-    idstudenti=max;
-}).catch((err)=>{
-    console.error(err);
-});
-
 var idcorso=0;
 var idistruttore=0;
 
 Corso.find({}).then((result)=>{
     var max=-1;
     result.forEach(element => {
-        if(element.idcorso>max){
-            max=element.idcorso;
+        if(element.id>max){
+            max=element.id;
         }
     });
     idcorso=max;
+}).catch((err)=>{
+    console.error(err);
+});
+
+Istruttore.find({}).then((result)=>{
+    var max=-1;
+    result.forEach(element => {
+        if(element.id>max){
+            max=element.id;
+        }
+    });
+    idistruttore=max;
 }).catch((err)=>{
     console.error(err);
 });
@@ -155,12 +147,20 @@ const generateRandomString=()=>{
 app.post("/inserisciStudenti",(req,res)=>{
 
     //Creazione studente
-    var newstud = new Studente({nome:req.body.nome, cognome:req.body.cognome, datanascita:req.body.datanascita, email: req.body.email, cellulare: req.body.cellulare, patente: req.body.patente,patentiinpossesso: req.body.patentiinpossesso,
-        username: "user"+generateRandomString(), password: generateRandomString()});
+    var newstud = new Studente({nome:req.body.nome, 
+        cognome:req.body.cognome, 
+        datanascita:req.body.datanascita, 
+        email: req.body.email, 
+        cellulare: req.body.cellulare, 
+        patente: req.body.patente,
+        patentiinpossesso: req.body.patentiinpossesso,
+        username: "user"+generateRandomString(), 
+        password: generateRandomString()});
     
-    newstud.save().then(()=>{
-        res.status(200).json(newstud);
-    })
+        console.log("Studente iscritto! \n Ecco l'iscrizione: \n"+newstud);
+        newstud.save().then(()=>{
+            res.status(200).json(newstud);
+        })
     
 });
 
@@ -189,8 +189,13 @@ app.get("/getStudenti",(req,res)=>{
 app.post("/inserisciIstruttori",(req,res)=>{
 
     //Creazione attività
-    var newistr = new Istruttore({id:Number(++idistruttore),nome:req.body.nome, cognome:req.body.cognome, cellulare: req.body.cellulare, email: req.body.email});
+    var newistr = new Istruttore({id:Number(++idistruttore),
+        nome:req.body.nome, 
+        cognome:req.body.cognome, 
+        cellulare: req.body.cellulare, 
+        email: req.body.email});
     
+    console.log("Istruttore inserito! \n Ecco l'iscrizione: \n"+newistr);
     newistr.save().then(()=>{
         res.status(200).json(newistr);
     })
@@ -223,7 +228,9 @@ app.get("/getIstruttori",(req,res)=>{
 app.post("/inserisciCorsi",(req,res)=>{
 
     //Creazione corso
-    var newcourse = new Corso({id:Number(++idcorso), patente: req.body.patente, descrizione: req.body.descrizione});
+    var newcourse = new Corso({id:Number(++idcorso), 
+        patente: req.body.patente, 
+        descrizione: req.body.descrizione});
     newcourse.save().then(()=>{
         res.status(200).json(newcourse);
     })
