@@ -44,38 +44,29 @@ var main = function(){
 
                 //Per le patenti implemento una selezione
                 var $labelpatente=$("<p class='labeltext'>").text("Patente");
-                var $selquad = $("<select class='selezione' name='choice'> <option value='Autoveicolo' selected>Autoveicolo</option> <option value='Motociclo' >Motociclo</option> </select>");
                 var $selpatente = $("<select class='selezione' name='choice'> <option value='AM'>AM</option> <option value='A1' selected>A1</option> <option value='A2' selected>A2</option> <option value='A' selected>A</option> <option value='B' selected>B</option>  </select>");
 
                 var $labelpatentiinpossesso=$("<p class='labeltext'>").text("Patenti già in possesso");
                 
-                var $AM = $("<input type='checkbox' name='choice' value='AM'/>AM <br />");
-                var $A1 = $("<input type='checkbox' name='choice' value='A1'/>A1 <br />");
-                var $A2 = $("<input type='checkbox' name='choice' value='A2'/>A2 <br />");
-                var $A = $("<input type='checkbox' name='choice' value='A'/>A <br />")
-                var $B = $("<input type='checkbox' name='choice' value='B'/>B <br /> <br />")
-        
                 //Creo un vettore che raccolga gli input immessi tramite checkboxes
-                var selezioni = [];
-                var checkboxes = document.querySelectorAll('input[type="checkbox"]');
 
-                // Itera attraverso gli elementi di input
-                checkboxes.forEach(function(checkbox) {
-                    if (checkbox.checked) {
-                        selezioni.push(checkbox.value); // Aggiungi il valore selezionato all'array
-                    }
-                });
+                var $AM = $("<input type='checkbox' name='AM' value='AM'/>AM <br />");
+                var $A1 = $("<input type='checkbox' name='A1' value='A1'/>A1 <br />");
+                var $A2 = $("<input type='checkbox' name='A2' value='A2'/>A2 <br />");
+                var $A = $("<input type='checkbox' name='A' value='A'/>A <br />")
+                var $B = $("<input type='checkbox' name='B' value='B'/>B <br /> <br />")
 
-                //__DEBUG___________________________________________________________________________________
-
-                console.log("Selezioni: " + selezioni.join(', '));
-
-                //_________________________________________________________________________________________
                 
                 var $buttoniscrizione=$("<button class='subscribe btn btn-outline-info'>").text("Invia");
 
                 //Aggiungo un listener sul click del bottone
                 $buttoniscrizione.on("click",function(){
+
+                    var valoriCheckbox = [];
+                    $("input[type=checkbox]:checked").each(function() {
+                        valoriCheckbox.push($(this).val());
+                      });
+                      console.log("Valori Checkbox selezionati: " + valoriCheckbox.join(", "));
 
                     //Sono stati compilati tutti i campi?
                     if($inputnome.val()!="" && $inputcognome.val()!="" && $inputemail.val()!="" && $inputdatanascita.val()!="" && $inputcellulare.val()!=""){
@@ -87,8 +78,8 @@ var main = function(){
                             datanascita: $inputdatanascita.val(),
                             email: $inputemail.val(),
                             cellulare: $inputcellulare.val(),
-                            patente: {type: $selquad.val(), enum: $selpatente.val()},
-                            patentiinpossesso: selezioni
+                            patente: $selpatente.val(),
+                            patentiinpossesso: valoriCheckbox.toString()
                         }
 
                         //Chiamata AJAX - POST per inviare l'iscrizione
@@ -110,10 +101,6 @@ var main = function(){
 
                         $(".tabs a:first-child span").trigger("click");
 
-                    }else if(($selquad.val()!="Autoveicolo" && $selpatente.val()=="B") && ($selquad.val()=="Autoveicolo" && $selpatente.val()!="B") ){
-                        //Selezione non valida della patente
-                        $("p.notify").text("Selezione patente non valida!").hide().fadeIn(800).fadeOut(3000);
-                    
                     }else{
                         //No, non tutti i campi sono stati compilati
                         $("p.notify").text("Compila tutti i campi!").hide().fadeIn(800).fadeOut(3000);
@@ -146,7 +133,7 @@ var main = function(){
                 });
 
                 //append degli elemnti html
-                $cont.append($labelnome).append($inputnome).append($labelcognome).append($inputcognome).append($labeldatanascita).append($inputdatanascita).append($labelemail).append($inputemail).append($labelcellulare).append($inputcellulare).append($labelpatente).append($selquad).append($selpatente).append($labelpatentiinpossesso).append($AM).append($A1).append($A2).append($A).append($B).append( $buttoniscrizione);
+                $cont.append($labelnome).append($inputnome).append($labelcognome).append($inputcognome).append($labeldatanascita).append($inputdatanascita).append($labelemail).append($inputemail).append($labelcellulare).append($inputcellulare).append($labelpatente).append($selpatente).append($labelpatentiinpossesso).append($AM).append($A1).append($A2).append($A).append($B).append( $buttoniscrizione);
                 $("main .content").append($cont);
 
 
@@ -163,8 +150,8 @@ var main = function(){
                     $cont.append($labelstud);
                         studenti.forEach((studente)=>{
 
-                            var $infoboxstud = $("<li class='infoboxstudente'>").text(studente.nome+" "+studente.cognome+"  Nato il:"+studente.datanascita+" \n email:"+studente.email+" cellulare:"+studente.cellulare+" \n patente:"+studente.patente+
-                            "\n Patenti in possesso \n AM:"+studente.patentiinpossesso.AM+"\n A1:"+studente.patentiinpossesso.A1+"\n A2:"+studente.patentiinpossesso.A2+"\n A:"+studente.patentiinpossesso.A+"\n B:"+studente.patentiinpossesso.B);
+                            var $infoboxstud = $("<li class='infoboxstudente'>").text(studente.nome+" "+studente.cognome+"  Nato il:"+studente.datanascita+
+                            " \n email:"+studente.email+" cellulare:"+studente.cellulare+" \n patente:"+studente.patente+"\n patenti in possesso: "+studente.patentiinpossesso);
 
                             $cont.append($infoboxstud);
                         })
@@ -272,7 +259,7 @@ var main = function(){
                     $cont.append($labelistr);
                         istruttori.forEach((istruttore)=>{
 
-                            var $infoboxistr = $("<li class='infoboxistruttore'>").text(istruttore.nome+" "+istruttore.cognome+"  Nato il:"+istruttore.datanascita+" cellulare:"+sistruttore.cellulare+" \n email:"+istruttore.email);
+                            var $infoboxistr = $("<li class='infoboxistruttore'>").text(istruttore.nome+" "+istruttore.cognome+" cellulare:"+istruttore.cellulare+" \n email:"+istruttore.email);
 
                             $cont.append($infoboxistr);
                         })
@@ -292,7 +279,6 @@ var main = function(){
 
                  //Label e input box per i campi da riempire
                  var $labelpatente=$("<p class='labeltext'>").text("Patente");
-                 var $selquad = $("<select class='selezione' name='choice'> <option value='Autoveicolo'>Autoveicolo</option> <option value='Motociclo' selected>Motociclo</option> </select>");
                  var $selpatente = $("<select class='selezione' name='choice'> <option value='AM'>AM</option> <option value='A1' selected>A1</option> <option value='A2' selected>A2</option> <option value='A' selected>A</option> <option value='B' selected>B</option>  </select>");
 
                  var $labeldescrizione=$("<p class='labeltext'>").text("descrizione");
@@ -300,15 +286,15 @@ var main = function(){
  
                  var $buttoncreazione=$("<button class='subscribe btn btn-outline-info'>").text("Crea");
  
-                 //Aggiungo un listener sul click del bottone
-                 $buttoncreazione.on("click",function(){
+                //Aggiungo un listener sul click del bottone
+                $buttoncreazione.on("click",function(){
  
                      //Sono stati compilati tutti i campi?
-                     if($inputdescrizione.val()!="" && ($selquad.val()=="Autoveicolo" && $selpatente.val()=="B") && ($selquad.val()=="Motociclo" && $selpatente.val()!="B")  && ($selquad.val()!="Motociclo" && $selpatente.val()=="B") ){
+                     if($inputdescrizione.val()!=""){
  
                          //Sì,tutto compilato
                          //Creo l'oggetto studente
-                         var cor={patente: {type:$selquad.val(), enum:$selpatente.val()}, 
+                         var cor={patente: $selpatente.val(), 
                              descrizione: $inputdescrizione.val()
                          }
  
@@ -340,7 +326,6 @@ var main = function(){
  
                  //append degli elemnti html
                  $cont.append($labelpatente)
-                        .append($selquad)
                         .append($selpatente)
                         .append($labeldescrizione)
                         .append($inputdescrizione)
@@ -374,13 +359,13 @@ var main = function(){
                         });
 
                         //Selezioni i bottoni di eliminazione
-                    document.querySelectorAll('button.deleteactivity').forEach((bottone)=>{
+                    document.querySelectorAll('button.deletecourse').forEach((bottone)=>{
 
                         //Listener del click del bottone
                         bottone.addEventListener("click", (e)=>{
 
                             //Oggetto in cui salvo l'id dell'attività da cancellare
-                            var el={idatt:e.target.getAttribute('id')}
+                            var el={id:e.target.getAttribute('id')}
                             console.log(el);
 
                             //DELETE Ajax

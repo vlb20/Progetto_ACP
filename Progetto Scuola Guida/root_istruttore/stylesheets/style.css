@@ -48,6 +48,8 @@ header{
     width: 80px;
 }
 
+
+
 header h1 {
     font-size: 56px;
 }
@@ -110,7 +112,6 @@ nav li a {
     text-transform: uppercase;
 }
 
-
 .labeltext {
     color: coral;
     font-style: normal;
@@ -118,43 +119,6 @@ nav li a {
     font-size: large;
     font-weight: bold;
 }
-
-.textbox{
-    color:#11055a;
-    letter-spacing: .11em;
-    margin: 8px;
-    margin-right: 20px;
-    padding: 7px;
-    width: fit-content;
-}
-
-ul.labelstudenti{
-    margin-top: auto;
-    margin-bottom: 1rem;
-    color: white;
-    background-color: coral;
-    font-size: xx-large;
-    font-weight: bold;
-}
-
-ul.labelistruttori{
-    margin-top: auto;
-    margin-bottom: 1rem;
-    color: white;
-    background-color: coral;
-    font-size: xx-large;
-    font-weight: bold;
-}
-
-ul.labelcorsi{
-    margin-top: auto;
-    margin-bottom: 1rem;
-    color: white;
-    background-color: coral;
-    font-size: xx-large;
-    font-weight: bold;
-}
-
 
 footer {
     width: 100%;

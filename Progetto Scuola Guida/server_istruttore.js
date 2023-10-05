@@ -13,36 +13,14 @@ app.use(express.static(__dirname+"/root_istruttore")) //Setta la root di base al
 
 
 //Creazione del database MongoDB
-const studenti = mongoose.createConnection("mongodb://127.0.0.1:27017/MyAutoscuola") //Creo una connessione con il database per l'istanza studenti
 const corsi = mongoose.createConnection("mongodb://127.0.0.1:27017/Corsi")
 const istruttori = mongoose.createConnection("mongodb://127.0.0.1:27017/Istruttori")
 const prenotazioni = mongoose.createConnection("mongodb://127.0.0.1:27017/Prenotazioni")
-const domande =mongoose.createConnection("mongodb://127.0.0.1:27017/Quiz")
+
 
 
 
 //DEFINIZIONE SCHEMI MONGOOSE
-
-//***Iscrizioni studenti***
-//All’atto dell’iscrizione, un impiegato della scuola guida registra i clienti nel sistema 
-//inserendo il loro nome, cognome, data di nascita, indirizzo di posta elettronica, telefono mobile, 
-//tipo di patente che si vuole conseguire, ed eventuali patenti già in possesso.
-var studentiScheme = mongoose.Schema({
-    nome: String,
-    cognome: String,
-    datanascita: String,
-    email: String,
-    cellulare: String,
-    patente: {
-        type: [String],
-        enum: ["AM", "A1", "A2","A","B"],
-        default: 'B'
-    },
-    patentiinpossesso: String,
-    username: String,
-    password: String
-
-})
 
 
 //***Corsi***
@@ -78,7 +56,7 @@ var istruttoriScheme = mongoose.Schema({
 //sistema per “accettare” le prenotazioni richieste dai clienti.
 var prenotazioniScheme = mongoose.Schema({
     id: Number,
-    studente: {String},
+    studente:String,
     idIstruttore: Number,
     stato:{
         type: [String],
@@ -91,22 +69,13 @@ var prenotazioniScheme = mongoose.Schema({
 })
 
 
-//domande VERO/FALSO
-var domandeScheme = mongoose.Schema({
-    richiesta: String,
-    risposta: Boolean
-})
-
-
 //Creazione modelli per lo schema
-var Studente=studenti.model("Studente",studentiScheme);
 var Corso=corsi.model("Corso",corsiScheme);
 var Istruttore=istruttori.model("Istruttore",istruttoriScheme);
 var Prenotazione=prenotazioni.model("Prenotazione",prenotazioniScheme);
-var Domanda=domande.model("Domanda",domandeScheme);
 
 
-//Creiamo il vettore degli studenti iscritti
+//Creiamo il vettore delle prenotazioni 
 var idprenotazioni=0;
 
 Prenotazione.find({}).then((result)=>{
@@ -154,7 +123,7 @@ app.get("/getCorsi",(req,res)=>{
 app.get("/getPrenotazioni/:istruttore",(req,res)=>{
 
     //Raccolgo i corsi dal database
-    Prenotazione.find({"istruttore":req.params.istruttore.toString().toUpperCase()}).then((risp)=>{
+    Prenotazione.find({"istruttore":req.params.istruttore}).then((risp)=>{
 
         //Ci sono dei corsi?
         if(risp.length!=0){
@@ -173,7 +142,7 @@ app.get("/getPrenotazioni/:istruttore",(req,res)=>{
 app.get("/getPrenotazioni/:stato",(req,res)=>{
 
     //Raccolgo i corsi dal database
-    Prenotazione.find({"stato":req.params.istruttore.toString().toUpperCase()}).then((risp)=>{
+    Prenotazione.find({"stato":req.params.stato.toString().toUpperCase()}).then((risp)=>{
 
         //Ci sono dei corsi?
         if(risp.length!=0){
