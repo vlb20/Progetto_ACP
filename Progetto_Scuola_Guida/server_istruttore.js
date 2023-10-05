@@ -36,7 +36,6 @@ app.get("/img/:filename", (req, res) => {
 
 //Creazione del database MongoDB
 const corsi = mongoose.createConnection("mongodb://127.0.0.1:27017/Corsi")
-const istruttori = mongoose.createConnection("mongodb://127.0.0.1:27017/Istruttori")
 const prenotazioni = mongoose.createConnection("mongodb://127.0.0.1:27017/Prenotazioni")
 
 
@@ -57,18 +56,6 @@ var corsiScheme = mongoose.Schema({
     descrizione: String
 
 })
-
-//***Istruttori***
-//Gli istruttori sono inseriti nel sistema dal segretario, 
-//che per ciascun istruttore inserisce nome, cognome, telefono e indirizzo e-mail
-var istruttoriScheme = mongoose.Schema({
-    id: Number,
-    nome: String,
-    cognome: String,
-    cellulare: String,
-    email: String
-})
-
 
 //***PRENOTAZIONI***
 //Un cliente accede al sistema per prenotare una lezione, 
@@ -91,7 +78,6 @@ var prenotazioniScheme = mongoose.Schema({
 
 //Creazione modelli per lo schema
 var Corso=corsi.model("Corso",corsiScheme);
-var Istruttore=istruttori.model("Istruttore",istruttoriScheme);
 var Prenotazione=prenotazioni.model("Prenotazione",prenotazioniScheme);
 
 

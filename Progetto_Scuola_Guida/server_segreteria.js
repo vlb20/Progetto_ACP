@@ -38,9 +38,6 @@ app.get("/img/:filename", (req, res) => {
 const studenti = mongoose.createConnection("mongodb://127.0.0.1:27017/Studenti") //Creo una connessione con il database per l'istanza studenti
 const corsi = mongoose.createConnection("mongodb://127.0.0.1:27017/Corsi")
 const istruttori = mongoose.createConnection("mongodb://127.0.0.1:27017/Istruttori")
-const prenotazioni = mongoose.createConnection("mongodb://127.0.0.1:27017/Prenotazioni")
-const domande =mongoose.createConnection("mongodb://127.0.0.1:27017/Quiz")
-
 
 
 //DEFINIZIONE SCHEMI MONGOOSE
@@ -92,40 +89,10 @@ var istruttoriScheme = mongoose.Schema({
     email: String
 })
 
-
-//***PRENOTAZIONI***
-//Un cliente accede al sistema per prenotare una lezione, 
-//indicando giorno e ora di inizio desiderati. Gli istruttori accedono al 
-//sistema per “accettare” le prenotazioni richieste dai clienti.
-var prenotazioniScheme = mongoose.Schema({
-    id:Number,
-    studente: {String},
-    idIstruttore: Number,
-    stato:{
-        type: [String],
-        enum: ["ATTESA", "ACCETTATA", "RIFIUTATA"],
-        default: 'ATTESA'
-    },
-    giorno: Date,
-    orario: String
-
-})
-
-
-//domande VERO/FALSO
-var domandeScheme = mongoose.Schema({
-    richiesta: String,
-    risposta: Boolean
-})
-
-
 //Creazione modelli per lo schema
 var Studente=studenti.model("Studente",studentiScheme);
 var Corso=corsi.model("Corso",corsiScheme);
 var Istruttore=istruttori.model("Istruttore",istruttoriScheme);
-var Prenotazione=prenotazioni.model("Prenotazione",prenotazioniScheme);
-var Domanda=domande.model("Domanda",domandeScheme);
-
 
 //Creiamo il vettore degli studenti iscritti
 var idcorso=0;

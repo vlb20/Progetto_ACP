@@ -143,20 +143,6 @@ var Istruttore=istruttori.model("Istruttore",istruttoriScheme);
 var Prenotazione=prenotazioni.model("Prenotazione",prenotazioniScheme);
 var Domanda=domande.model("Domanda",domandeScheme);
 
-//Creazione vettore delle domande
-var iddomande=0;
-
-Domanda.find({}).then((result)=>{
-    var max=-1;
-    result.forEach(element => {
-        if(element.iddomande>max){
-            max=element.iddomande;
-        }
-    });
-    iddomande=max;
-}).catch((err)=>{
-    console.error(err);
-});
 
 var idprenotazioni=0;
 
@@ -168,20 +154,6 @@ Prenotazione.find({}).then((result)=>{
         }
     });
     idprenotazioni=max;
-}).catch((err)=>{
-    console.error(err);
-});
-
-var idistruttori=0;
-
-Istruttore.find({}).then((result)=>{
-    var max=-1;
-    result.forEach(element => {
-        if(element.id>max){
-            max=element.id;
-        }
-    });
-    idistruttori=max;
 }).catch((err)=>{
     console.error(err);
 });
@@ -341,7 +313,6 @@ app.get("/getDomande",(req,res)=>{
 
 
 //GESTIONE CORSI
-
 
 //GET: Visualizza corsi
 app.get("/getCorsi",(req,res)=>{
