@@ -27,10 +27,12 @@ var main = function(){
                 
                 $cont=$("<div>");
 
-                
-
                  //GET Ajax all'url offerto da server_istruttori per l'acquisizione delle prenotazioni pendenti
                  $.getJSON("/getPrenotazioni/attesa", (lezioni)=>{
+
+                    
+                    var $labelprenotazioniattesa = $("<ul class='labelprenattesa'>").text("PRENOTAZIONI IN ATTESA");
+                    $cont.append($labelprenotazioniattesa);
 
                     //scorro l'array di iscrizioni
                     lezioni.forEach((lezione)=>{
@@ -44,7 +46,7 @@ var main = function(){
                         $cont.append($labelpren).append($buttonaccetta).append($buttonrifiuta);
 
                         })
-
+                        
                     
                     }).then(()=>{
 
@@ -52,13 +54,13 @@ var main = function(){
                         document.querySelectorAll("button").forEach((button)=>{
     
                             //Aggiungo un listener sul click differenziando il comportamento per classe
-                            button.addEventListener("click", (el)=>{
+                            button.addEventListener("click", (element)=>{
     
                                 //Se si tratta del bottone 'assegna' -> PUT cambiando lo stato in ACCETTATA
-                                if (el.target.getAttribute("name")=="accetta"){
+                                if (element.target.getAttribute("name")=="accetta"){
     
                                     //Creo l'oggetto contente l'id della prenotazione
-                                    var el = {"id":el.target.getAttribute("class")}
+                                    var el = {"id":element.target.getAttribute("class")}
                                     
                                     //Chiamata Ajax - PUT
                                     $.ajax({
@@ -76,10 +78,10 @@ var main = function(){
                                     })
     
                                 }//Se si tratta del bottone 'rifiuta' -> PUT cambiando lo stato in RIFIUTATA
-                                else if(el.target.getAttribute("name")=="rifiuta"){
+                                else if(element.target.getAttribute("name")=="rifiuta"){
     
                                     //Creo l'oggetto contente la matricola dell'iscritto target
-                                    var el = {"id":el.target.getAttribute("class")}
+                                    var el = {"id":element.target.getAttribute("class")}
     
                                     //Chiamata Ajax -PUT
                                     $.ajax({
@@ -103,7 +105,7 @@ var main = function(){
                         })
     
                     }).fail((jqXHR)=>{
-                        $cont.append($("<li class='error'>").text("Nessuna prenotazione da gestire!")).hide().fadeIn(800).fadeOut(800);
+                        $cont.append($("<li class='error'>").text("Nessuna prenotazione da gestire!")).hide().fadeIn(800);
                     })
     
                     //Append della nostra variabile al content
@@ -124,10 +126,12 @@ var main = function(){
                     var istr=[];
 
                     //Creo un vettore con gli istruttori che hanno delle lezioni di guida
-                    lezioni.istruttore.forEach(function(is){
-                        if(istr.indexOf(is)==-1){
-                            istr.push(is);
-                        }
+                    lezioni.forEach((lezione)=>{
+
+                            //Aggiungo l'istruttore al vettore 
+                            if(istr.indexOf(lezione.idIstruttore)==-1){
+                                istr.push(lezione.idIstruttore);
+                            } 
                     });
 
                     //debug
@@ -137,11 +141,11 @@ var main = function(){
                     var istrObjects=istr.map(function(is){
                         var lezwithistr =[];
 
-                        istrObjects.forEach(function(lez){
-                            if(lez.istruttore.indexOf !==-1){
-                                lezwithistr.push(lez);
-                            }
-                        });
+                            lezioni.forEach((lezione)=>{
+                                if(lezione.idIstruttore==is){
+                                    lezwithistr.push(lezione);
+                                }
+                            })
 
                         return{"istruttore": is, "prenotazioni": lezwithistr};
                     });
@@ -151,14 +155,16 @@ var main = function(){
                             $content=$("<ul>");
 
                         is.prenotazioni.forEach(function(pren){
-                            var $li= $("<li>").text("Lezione di guida di "+pren.studente.nome+" "+pren.studente.cognome+" il giorno "+pren.giorno.toString()+" alle ore "+ pren.orario);
+                            var $li= $("<li>").text("Lezione di guida di "+pren.studente+" il giorno "+pren.giorno.toString()+" alle ore "+ pren.orario);
                             $content.append($li);
                         })
+
+                        //Quindi appendiamo le nostre variabili al content
+                        $("main .content").append($istrName);
+                        $("main .content").append($content);
                     });
 
-                    //Quindi appendiamo le nostre variabili al content
-                    $("main .content").append($istrName);
-                    $("main .content").append($content);
+                    
 
 
                 }).fail((jqXHR)=>{
@@ -222,20 +228,20 @@ var check = function(firstcall){
         }else if(num_prenotazioni!=pren.length){
 
             //Se il contatore è cambiato invio la notifica
-            num_prenotazioni=prenotazioni.length;
+            num_prenotazioni=pren.length;
             var el = document.querySelector(".active");
 
             //Se mi trovo già sul primo tab triggero il click fittiziamente
             if(el.getAttribute("id")=="gestisciprenotazionitab"){
                 $(el).trigger("click");
-                $(".alert").text("Nuova prenotazione in attesa");
+                $(".alert").text("Nuova prenotazione in attesa").fadeOut(800);
                 $(".alert").on("click",()=>{
                     $(".alert").text("");
                 })
 
             }else{
                 //Se invece mi trovo su un'altro tab notifico la modifica
-                $(".alert").text("Aggiornate le prenotazioni");
+                $(".alert").text("Aggiornate le prenotazioni").fadeOut(800);
                 $(".alert").on("click", ()=>{
 
                     $(".alert").text("");

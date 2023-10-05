@@ -120,10 +120,10 @@ app.get("/getCorsi",(req,res)=>{
 //GESTIONE PRENOTAZIONI
 
 //GET: Visualizza Prenotazioni
-app.get("/getPrenotazioni/:istruttore",(req,res)=>{
+app.get("/getPrenotazioni",(req,res)=>{
 
     //Raccolgo i corsi dal database
-    Prenotazione.find({"istruttore":req.params.istruttore}).then((risp)=>{
+    Prenotazione.find({}).then((risp)=>{
 
         //Ci sono dei corsi?
         if(risp.length!=0){
