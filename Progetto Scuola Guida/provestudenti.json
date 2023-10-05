@@ -1,0 +1,14 @@
+[{
+    "_id": {
+        "$oid": "651ae97071b2390ab5800245"
+    },
+    "nome": "Luigi",
+    "cognome": "Verdi",
+    "datanascita": "1991-02-02",
+    "email": "luigi.verdi@example.com",
+    "cellulare": "0987654321",
+    "patente": "A",
+    "patentiinpossesso": "B, A1",
+    "username": "luigi91",
+    "password": "password2"
+}]
