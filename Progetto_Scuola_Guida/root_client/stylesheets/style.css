@@ -1,0 +1,464 @@
+@import url('<link href="https://fonts.googleapis.com/css2?family=Crimson+Text&display=swap" rel="stylesheet">');
+
+* {
+    padding: 0;
+    margin: 0;
+    font-family: 'Crimson Text', serif !important;
+}
+
+ul{
+    list-style: none;
+    text-align: left;
+    padding-inline-start: 0px !important;
+}
+
+li{
+    list-style: none;
+}
+
+
+body {
+    margin: 0px;
+    background-color: #936c00;
+}
+
+header{
+    /* Contenuto centrato e distanziato di 20px */
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    gap: 160px;
+
+    width: 100%;
+    height: 20%;
+
+    background-color: #f0f0f0;
+}
+
+.banner-intro {
+    width: 100%;
+    height: 500px;
+    padding: 2%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+
+    color: white;
+
+}
+
+.main-spacer {
+    width: 100%;
+    height: 20px;
+}
+
+.icon-header {
+    padding: 5px;
+    width: 80px;
+}
+
+header h1 {
+    font-size: 56px;
+}
+
+main {
+    margin-top:50px;
+}
+
+html {
+    letter-spacing: .15em;
+    font-weight: 450;
+    font-size: 18px;
+}
+
+::selection {
+    background-color: #ff3301;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+input:focus,
+textarea:focus,
+select:focus,
+button:focus {
+    outline: none;
+    border: 0.5px solid #283739;
+}
+
+/* Elementi Testuali */
+
+div.title h1 {
+    font-size: 30px;
+    color:#082B59;
+    font-weight: bolder;
+    font-family: serif;
+    padding: 30px;
+    background-color: #fafaf9;
+    margin-top: 10px;
+}
+
+a {
+    color: #ece9e6;
+    text-decoration: none;
+}
+
+.error{
+    color:#000000;
+}
+
+/*Gestione Documento*/
+header,
+main,
+footer {
+    min-width: 1100px;
+}
+
+header {
+    text-align: center;
+}
+
+
+footer {
+
+    background-color: #bd9f27;
+
+}
+
+main .container {
+    max-width: 950px;
+    margin: auto;
+}
+
+/* AREA MAIN */
+
+main .content {
+    background-color: #ffffff;
+    padding: 20px 0px 20px 20px;
+    text-align: left;
+    word-wrap: break-word;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    height: auto;
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+main .content p {
+    padding-bottom: 5px;
+}
+
+.tabs a span {
+    display: inline-block;
+    margin-right: 35px;
+    padding: 7px;
+    text-align: center;
+    width: fit-content;
+    font-weight: bold;
+    font-size: 20px;
+    color: #f3f3f3;
+    margin-top: 10px;
+    text-transform: uppercase;
+}
+
+.tabs a .active {
+    background-color: #bd9f27;
+    color: #F5F5F5;
+    text-transform: uppercase;
+}
+
+
+
+/*AREA PERSONALE*/
+
+li.infostudente{
+    color:#000000;
+    font-size: larger;
+    letter-spacing: .11em;
+    margin: 8px;
+    margin-right: 20px;
+    padding: 7px;
+    width: fit-content;
+}
+
+li.labelstudente{
+    background-color: #940707;
+    color:#ffffff;
+    padding: 6px;
+    text-indent: 10px;
+    text-align: center;
+    font-weight: bold;
+    width: fit-content;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+/* AREA VISUALIZZA CORSI*/
+
+li.listidcorso{
+    background-color: #940707;
+    color:#ffffff;
+    padding: 6px;
+    text-indent: 10px;
+    text-align: center;
+    font-weight: bold;
+    width: fit-content;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+li.infocorso{
+    color:#000000;
+    font-size: larger;
+    letter-spacing: .11em;
+    margin: 8px;
+    margin-right: 20px;
+    padding: 7px;
+    width: fit-content;
+}
+
+/* AREA QUIZ */
+
+li.domrichiesta{
+    background-color: #940707;
+    color:#ffffff;
+    padding: 6px;
+    text-indent: 10px;
+    text-align: center;
+    font-weight: bold;
+    width: fit-content;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+li.richiesta{
+    font-size: larger;
+}
+
+.checkbox{
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #eee
+}
+
+button.fine{
+    margin-left:20px;
+    color: #268a44;
+    border-color: #1baf47;
+    transform: translateY(40%);
+    background-color: beige;
+}
+
+li.countererrate{
+    font-size: large;
+    padding: 6px;
+    background-color: red;
+    color:#ffffff;
+    text-indent: 10px;
+    text-align: center;
+    font-weight: bold;
+    width: fit-content;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+li.countercorrette{
+    font-size: large;
+    padding: 6px;
+    background-color: rgb(20, 202, 59);
+    color:#ffffff;
+    text-indent: 10px;
+    text-align: center;
+    font-weight: bold;
+    width: fit-content;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+/* AREA VISUALIZZA ISTRUTTORI */
+
+li.listidistruttore{
+    background-color: #940707;
+    color:#ffffff;
+    padding: 6px;
+    text-indent: 10px;
+    text-align: center;
+    font-weight: bold;
+    width: fit-content;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+li.infoistruttore{
+    color:#000000;
+    font-size: larger;
+    letter-spacing: .11em;
+    margin: 8px;
+    margin-right: 20px;
+    padding: 7px;
+    width: fit-content;
+}
+
+/* AREA PRENOTAZIONE LEZIONI */
+
+p.labeltext{
+    background-color: #940707;
+    color:#ffffff;
+    padding: 6px;
+    text-indent: 10px;
+    text-align: center;
+    font-weight: bold;
+    width: fit-content;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+button.prenota{
+    margin-left:20px;
+    transform: translateY(10%);
+    color: #940707;
+    outline-color: #940707;
+    border-color: #940707;
+}
+
+/* AREA GESTISCI PRENOTAZIONI */
+li.attesa{
+    background-color: #bd9f27;
+    color:#ffffff;
+    padding: 6px;
+    text-indent: 10px;
+    text-align: center;
+    font-weight: bold;
+    width: fit-content;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+li.accettata{
+    background-color: #099e18;
+    color:#ffffff;
+    padding: 6px;
+    text-indent: 10px;
+    text-align: center;
+    font-weight: bold;
+    width: fit-content;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+li.rifiutata{
+    background-color: #fb3600;
+    color:#ffffff;
+    padding: 6px;
+    text-indent: 10px;
+    text-align: center;
+    font-weight: bold;
+    width: fit-content;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+li.infopren{
+    color:#000000;
+    font-size: larger;
+    letter-spacing: .11em;
+    margin: 8px;
+    margin-right: 20px;
+    padding: 7px;
+    width: fit-content;
+}
+
+
+/*AREA ALERT E NOTIFY */
+
+p.alert {
+    color: #e01e1e;
+    margin-bottom: 15px;
+    margin-left: auto;
+}
+
+p.alert:hover {
+    cursor: pointer;
+}
+
+p.notify {
+    color:#F5F5F5;
+    display: inline-block;
+    padding: 20px 0px 20px 20px;
+    margin-left: auto;
+}
+
+
+/* AREA FOOTER */
+footer {
+    width: 100%;
+    height: auto;
+    padding: 20px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    background-color: #bd9f27;
+    color: white;
+    border-top: 1px solid black;
+}
+
+.contacts {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.contact-icons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+}
+
+.contact-icons a img {
+    width: 50px;
+}
+
+.quotes {
+    background-color: #bd9f27;
+    padding: 10px;
+}
+
+.footer-description {
+    padding-top: 20px;
+    font-size: 20px;
+    text-align: center;
+}
+
+.quotes li, .infobox li {
+    padding-bottom: 10px;
+    color: #F5F5F5;
+}
+
+footer h5 {
+    font-weight: bold;
+    font-size: 18px;
+    color: #ffffff;
+    text-transform: uppercase;
+    margin-top: 8px;
+    margin-bottom: 5px;
+}
+
+@media screen and (max-width: 992px){
+    
+}
+
+@media screen and (max-width: 600px){
+    
+}
