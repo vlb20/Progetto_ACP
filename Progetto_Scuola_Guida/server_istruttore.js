@@ -28,12 +28,6 @@ app.get("/img/icons/:filename", (req, res) => {
     res.sendFile(path.join(__dirname, 'img', 'icons', filename));
 });
 
-//Gestisce le richieste GET per le immagini nella cartella per gli sfondi
-app.get("/img/background/:filename", (req, res) => {
-    const filename = req.params.filename;
-    res.sendFile(path.join(__dirname, 'img', 'background', filename));
-});
-
 //Gestisce le richieste GET per le immagini nella cartella generale
 app.get("/img/:filename", (req, res) => {
     const filename = req.params.filename;
