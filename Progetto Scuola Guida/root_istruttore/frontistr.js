@@ -36,14 +36,16 @@ var main = function(){
                     lezioni.forEach((lezione)=>{
                         
                         //Elementi HTML per gestire le iscrizioni
-                        var $labelstatopren = $("<li class='labelstatopren' id='"+lezione.stato+"'>").text("Istruttore: " +lezione.istruttore.cognome+"\nLezione di guida di "+lezione.studente.nome+" "+lezione.stuente.cognome+" - Stato: "+lezione.stato);
-                        var $buttonassegna = $("<button name='assegna' id='buttonassegna' class='"+lezione.id+"'>").text("Accetta");
+                        var $labelpren = $("<li class='labelpren' id='"+lezione.id+"'>").text("Istruttore: " +lezione.idIstruttore+"\nLezione di guida di "+lezione.studente+" - Stato: "+lezione.stato);
+                        var $buttonaccetta = $("<button name='accetta' id='buttonaccetta' class='"+lezione.id+"'>").text("Accetta");
                         var $buttonrifiuta = $("<button name='rifiuta' id='buttonrifiutaiscr' class='"+lezione.id+"'>").text("Rifiuta");
 
                         //Appendo al content gli elementi creati
-                        $cont.append($labelstatopren).append($buttonassegna).append($buttonrifiuta);
+                        $cont.append($labelpren).append($buttonaccetta).append($buttonrifiuta);
 
                         })
+
+                    
                     }).then(()=>{
 
                         //Seleziono tutti i bottoni
@@ -52,10 +54,10 @@ var main = function(){
                             //Aggiungo un listener sul click differenziando il comportamento per classe
                             button.addEventListener("click", (el)=>{
     
-                                //Se si tratta del bottone 'assegna' -> PUT cambiando lo stato in ASSEGNATO
-                                if (el.target.getAttribute("name")=="assegna"){
+                                //Se si tratta del bottone 'assegna' -> PUT cambiando lo stato in ACCETTATA
+                                if (el.target.getAttribute("name")=="accetta"){
     
-                                    //Creo l'oggetto contente la matricola dell'iscritto target
+                                    //Creo l'oggetto contente l'id della prenotazione
                                     var el = {"id":el.target.getAttribute("class")}
                                     
                                     //Chiamata Ajax - PUT
@@ -73,7 +75,7 @@ var main = function(){
                                         $(".notify").text("Operazione non andata a buon fine!").hide().fadeIn(800).fadeOut(3000);
                                     })
     
-                                }//Se si tratta del bottone 'rifiuta' -> PUT cambiando lo stato in NON ASSEGNATO
+                                }//Se si tratta del bottone 'rifiuta' -> PUT cambiando lo stato in RIFIUTATA
                                 else if(el.target.getAttribute("name")=="rifiuta"){
     
                                     //Creo l'oggetto contente la matricola dell'iscritto target
@@ -101,7 +103,7 @@ var main = function(){
                         })
     
                     }).fail((jqXHR)=>{
-                        $cont.append($("<li class='error'>").text("Nessuna prenotazione da gestire!")).hide().fadeIn(800);
+                        $cont.append($("<li class='error'>").text("Nessuna prenotazione da gestire!")).hide().fadeIn(800).fadeOut(800);
                     })
     
                     //Append della nostra variabile al content
@@ -187,7 +189,7 @@ var main = function(){
                         })
 
                 }).fail((jqXHR)=>{
-                    $(".notify").text(" Nessun corso trovato! ").hide().fadeIn(300);
+                    $(".notify").text(" Nessun corso trovato! ").hide().fadeIn(300).fadeOut(800);
                 })
 
                 
