@@ -123,12 +123,12 @@ var main = function(){
                 //GET Ajax all'url offerto da server_istruttori per la lista delle prenotazioni accettate
                 $.getJSON("/getPrenotazioni/accettata", (lezioni)=>{
 
-                    var istr=[];
+                    var istr=[]; //Inizializzo un vettore per gli istruttori
 
                     //Creo un vettore con gli istruttori che hanno delle lezioni di guida
                     lezioni.forEach((lezione)=>{
 
-                            //Aggiungo l'istruttore al vettore 
+                            //Aggiungo l'istruttore al vettore se questo non è già presente nel vettore
                             if(istr.indexOf(lezione.idIstruttore)==-1){
                                 istr.push(lezione.idIstruttore);
                             } 
@@ -137,24 +137,25 @@ var main = function(){
                     //debug
                     console.log(istr);
 
-                    //Creo una struttura che abbia come chiave l'istruttore scelto per la lezione di guida
-                    var istrObjects=istr.map(function(is){
-                        var lezwithistr =[];
+                    //Creiamo una struttura che abbia come chiave l'istruttore scelto per la lezione di guida
+                    //Lo facciamo attraverso la funzione map che associa ad ogni istruttore la lista delle lezioni di guida che deve effettuare
+                    var istrObjects=istr.map(function(is){ 
+                        var lezwithistr =[]; //inizializzo la lista delle lezioni associate all'istruttore
 
-                            lezioni.forEach((lezione)=>{
-                                if(lezione.idIstruttore==is){
-                                    lezwithistr.push(lezione);
+                            lezioni.forEach((lezione)=>{ //per ogni lezione
+                                if(lezione.idIstruttore==is){ //se l'istruttore corrisponde alla chiave
+                                    lezwithistr.push(lezione); //aggiungi la lezione alla lista
                                 }
                             })
 
-                        return{"istruttore": is, "prenotazioni": lezwithistr};
+                        return{"istruttore": is, "prenotazioni": lezwithistr}; //ritorno quindi una strutture così definita
                     });
 
-                    istrObjects.forEach(function(is){
+                    istrObjects.forEach(function(is){ //Ad ogni istruttore associo una label HTML 
                         var $istrName=$("<h3>").text(is.istruttore),
                             $content=$("<ul>");
 
-                        is.prenotazioni.forEach(function(pren){
+                        is.prenotazioni.forEach(function(pren){ //Stampa delle lezioni
                             var $li= $("<li>").text("Lezione di guida di "+pren.studente+" il giorno "+pren.giorno.toString()+" alle ore "+ pren.orario);
                             $content.append($li);
                         })
@@ -183,18 +184,19 @@ var main = function(){
                 $cont = $("<div>");
 
                 //GET Ajax all'URL offerto da server_segreteria per l'ottenimento della lista degli studenti assegnati
-                $.getJSON("/getCorsi", (corsi)=>{
+                $.getJSON("/getCorsi", (corsi)=>{ //Ci sono corsi?
 
+                    //Sì, ce ne sono
                     var $labelcor = $("<ul class='labelcorsi'>").text("CORSI");
                     $cont.append($labelcor);
-                        corsi.forEach((corso)=>{
+                        corsi.forEach((corso)=>{ //per ogni corso stampo le informazioni relative
 
                             var $infoboxcor = $("<li class='infoboxcorso'>").text(corso.id+"- Corso per la patente "+corso.patente+" \n "+corso.descrizione);
-
                             $cont.append($infoboxcor);
                         })
 
                 }).fail((jqXHR)=>{
+                    //No, non ce ne sono 
                     $(".notify").text(" Nessun corso trovato! ").hide().fadeIn(300).fadeOut(800);
                 })
 
@@ -225,13 +227,13 @@ var check = function(firstcall){
 
             num_prenotazioni=pren.length;
 
-        }else if(num_prenotazioni!=pren.length){
+        }else if(num_prenotazioni!=pren.length){ 
 
-            //Se il contatore è cambiato invio la notifica
+            //Altrimenti, se il contatore è cambiato invio la notifica
             num_prenotazioni=pren.length;
-            var el = document.querySelector(".active");
+            var el = document.querySelector(".active"); 
 
-            //Se mi trovo già sul primo tab triggero il click fittiziamente
+            //Se mi trovo già sul primo tab triggero il click fittiziamente cos' da avere la notifica sul refresh
             if(el.getAttribute("id")=="gestisciprenotazionitab"){
                 $(el).trigger("click");
                 $(".alert").text("Nuova prenotazione in attesa").fadeOut(800);

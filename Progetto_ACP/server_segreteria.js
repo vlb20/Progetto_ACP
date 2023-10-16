@@ -67,7 +67,7 @@ var Attivita = attivita.model("Attivita", attivitaScheme);
 var Materia = materie.model("Materia", materieScheme);
 
 
-//Contatore attività
+//Contatore attività e pagelle
 var idattivita=0;
 var idpagella=0;
 

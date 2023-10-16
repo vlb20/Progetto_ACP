@@ -13,7 +13,7 @@ var main = function(){
         //Setto un handler del click per ogni tab
         $(element).on("click", ()=>{
 
-            //Rimuovo la classe active dai tab per gestire l''higlighting tramite foglio CSS
+            //Rimuovo la classe active dai tab per gestire l'higlighting tramite foglio CSS
             $(".tabs a span").removeClass("active");
             $(element).addClass("active"); //Rendo active soltanto il tab cliccato
             $("main .content").empty();
@@ -42,14 +42,14 @@ var main = function(){
                 var $labelcellulare=$("<p class='labeltext'>").text("Cellulare");
                 var $inputcellulare=$("<input class='textbox' placeholder='Inserisci recapito dello studente...'>");
 
-                //Per le patenti implemento una selezione
+                //Per le patenti implemento una selezione (unica)
                 var $labelpatente=$("<p class='labeltext'>").text("Patente");
                 var $selpatente = $("<select class='selezione' name='choice'> <option value='AM'>AM</option> <option value='A1' selected>A1</option> <option value='A2' selected>A2</option> <option value='A' selected>A</option> <option value='B' selected>B</option>  </select>");
 
                 var $labelpatentiinpossesso=$("<p class='labeltext'>").text("Patenti già in possesso");
                 
-                //Creo un vettore che raccolga gli input immessi tramite checkboxes
-
+                //Per la selezione delle patenti già in possesso creiamo delle checkboxes
+                //con selezione multipla, il loro valore verrà raccolto in un vettore
                 var $AM = $("<input type='checkbox' name='AM' value='AM'/>AM <br />");
                 var $A1 = $("<input type='checkbox' name='A1' value='A1'/>A1 <br />");
                 var $A2 = $("<input type='checkbox' name='A2' value='A2'/>A2 <br />");
@@ -62,11 +62,11 @@ var main = function(){
                 //Aggiungo un listener sul click del bottone
                 $buttoniscrizione.on("click",function(){
 
-                    var valoriCheckbox = [];
-                    $("input[type=checkbox]:checked").each(function() {
-                        valoriCheckbox.push($(this).val());
+                    var valoriCheckbox = []; //Creo un vettore che raccolga gli input immessi tramite checkboxes
+                    $("input[type=checkbox]:checked").each(function() { //per ogni checkbox selezionata
+                        valoriCheckbox.push($(this).val()); //inserisco il valore in un vettore
                       });
-                      console.log("Valori Checkbox selezionati: " + valoriCheckbox.join(", "));
+                      console.log("Valori Checkbox selezionati: " + valoriCheckbox.join(", ")); //debug
 
                     //Sono stati compilati tutti i campi?
                     if($inputnome.val()!="" && $inputcognome.val()!="" && $inputemail.val()!="" && $inputdatanascita.val()!="" && $inputcellulare.val()!=""){
@@ -92,14 +92,14 @@ var main = function(){
                         }).done(function(){
                             //Inserimento avvenuto con successo
                             $("p.notify").text("Iscrizione sottoposta").hide().fadeIn(800).fadeOut(3000);
-                            $inputnome.val("");
+                            $inputnome.val(""); //pulizia degli input
                             $inputcognome.val("");
                             $inputdatanascita.val("");
                             $inputemail.val("");
                             $inputcellulare.val("");
                         })
 
-                        $(".tabs a:first-child span").trigger("click");
+                        $(".tabs a:first-child span").trigger("click"); //In questo modo torniamo al primo tab dopo l'invio
 
                     }else{
                         //No, non tutti i campi sono stati compilati
@@ -107,29 +107,31 @@ var main = function(){
                     }
                 });
 
+                //Facciamo in modo che premendo il tasto invio si possa compilare il campo successivo
+                //lo facciamo associanfo all'evento keypress (invio) il focus all'elemento successivo
                 $inputnome.on("keypress",function(event){
                     if(event.key=="Enter")
-                    $inputcognome.focus();
+                        $inputcognome.focus();
                 });
 
                 $inputcognome.on("keypress",function(event){
                     if(event.key=="Enter")
-                    $inputdatanascita.focus();
+                        $inputdatanascita.focus();
                 });
 
                 $inputdatanascita.on("keypress",function(event){
                     if(event.key=="Enter")
-                    $inputemail.focus();
+                        $inputemail.focus();
                 });
 
                 $inputemail.on("keypress",function(event){
                     if(event.key=="Enter")
-                    $inputcellulare.focus();
+                        $inputcellulare.focus();
                 });
 
                 $inputcellulare.on("keypress",function(event){
                     if(event.key=="Enter")
-                    $buttoniscrizione.focus();
+                        $buttoniscrizione.focus();
                 });
 
                 //append degli elemnti html
@@ -208,19 +210,22 @@ var main = function(){
                         }).done(function(){
                             //Inserimento avvenuto con successo
                             $("p.notify").text("Iscrizione sottoposta").hide().fadeIn(800).fadeOut(3000);
-                            $inputnome.val("");
+                            $inputnome.val(""); //pulizia degli input
                             $inputcognome.val("");
                             $inputemail.val("");
                             $inputcellulare.val("");
                         })
 
-                        $(".tabs a:first-child span").trigger("click");
+                        $(".tabs a:first-child span").trigger("click"); //In questo modo torniamo al primo tab dopo l'invio
 
                     }else{
                         //No, non tutti i campi sono stati compilati
                         $("p.notify").text("Compila tutti i campi!").hide().fadeIn(800).fadeOut(3000);
                     }
                 });
+
+                //Facciamo in modo che premendo il tasto invio si possa compilare il campo successivo
+                //lo facciamo associanfo all'evento keypress (invio) il focus all'elemento successivo
 
                 $inputnome.on("keypress",function(event){
                     if(event.key=="Enter")
@@ -311,7 +316,7 @@ var main = function(){
                             $inputdescrizione.val("");
                         })
 
-                        $(".tabs a:first-child span").trigger("click");
+                        $(".tabs a:first-child span").trigger("click"); //In questo modo torniamo al primo tab dopo l'invio
 
                     }else{
                         //No, non tutti i campi sono stati compilati
@@ -319,6 +324,7 @@ var main = function(){
                     }
                 });
 
+                //Anche qui facciamo in modo che con il click del keypress sia possibile compilare il campo successivo
                 $inputdescrizione.on("keypress",function(event){
                     if(event.key=="Enter")
                     $buttoncreazione.focus();
@@ -342,8 +348,10 @@ var main = function(){
                 //GET Ajax all'URL offerto da server_segreteria per l'ottenimento della lista degli studenti assegnati
                 $.getJSON("/getCorsi", (corsi)=>{
 
+                    //Creiamo una label generale 
                     var $labelcor = $("<ul class='labelcorsi'>").text("CORSI");
                     $cont.append($labelcor);
+                        //Per ogni corso stampiamo a video le informazioni relative ad esso con una infobox
                         corsi.forEach((corso)=>{
 
                             //Bottone per l'eliminazione del corso, con dentro l'id univoco del corso da eliminare
@@ -358,7 +366,7 @@ var main = function(){
 
                         });
 
-                        //Selezioni i bottoni di eliminazione
+                    //Selezione dei bottoni di eliminazione
                     document.querySelectorAll('button.deletecourse').forEach((bottone)=>{
 
                         //Listener del click del bottone
@@ -375,7 +383,7 @@ var main = function(){
                                 dataType:"json",
                                 data:el
                             }).done(()=>{
-                                //Se l'operazione va a buon fine refresho la paggina e manndo un messaggio di successo
+                                //Se l'operazione va a buon fine refresho la pagina e mando un messaggio di successo
                                 $(".tabs a:nth-child(6) span").trigger("click");
                                 $(".notify").text("Corso eliminato!").hide().fadeIn(800).fadeOut(3000);
                             }).fail((jqXHR)=>{
