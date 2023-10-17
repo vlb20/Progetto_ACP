@@ -223,6 +223,10 @@ var main=function(){
                                             var $labelcountererr = $("<li class='countererrate'>").text("Numero domande errate: "+counterErrate);
                                             $cont.append($labelcountercorr).append($labelcountererr);
 
+                                            //riinizializzazione del conteggio
+                                            counterCorrette=0;
+                                            counterErrate=0;
+
                                         }else{
                                             // Messaggio di errore se non sono state risposte abbastanza domande
                                             $cont.append($("<li class='errorquiz'>").text("Devi rispondere a tutte le domande!")).hide().fadeIn(1500).fadeOut(2000);
