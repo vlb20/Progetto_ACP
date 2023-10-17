@@ -1,22 +1,17 @@
-/*Variabile globale per segnalare che l'iscrizione è stata approvata
-var iscrizione_sottoposta=0;
-var iscrizione_accettata=0;
-var matricola_personale=0;
-var codicefiscalestud=0;
-var num_attivita=0;
-*/
-
 
 var main=function(){
 
     "use strict";
 
-    var $cont;
+    /* Definizione di variabili locali e gestione delle schede */
 
+    var $cont; //per poi aggiungere i nuovi contenuti al DOM dell'applicazione
+
+    //Aggiungo un listener per gestire il click su ciascuna scheda.
     $(".tabs a span").toArray().forEach(function(element){
         var $element=$(element);
 
-        //creo un click handler per l'elemento
+        //creo un click handler per la scheda -> per l'aggiornamento del contenuto
         $element.on("click",function(){
 
             $(".tabs a span").removeClass("active");
@@ -24,23 +19,26 @@ var main=function(){
             $("main .content").empty();
 
 
-            //GESTIONE TAB
+            /* GESTIONE TAB */
 
             //TAB 1: VISUALIZZA ISCRIZIONE STUDENTE
             if($element.parent().is(":nth-child(1)")){
                 
                 $cont=$("<ul>");
 
+                //Controllo Autenticazione Utente
                 $.ajax({
                     method: "GET",
                     url: "/autenticazioneAvvenuta",
                     dataType: "json",
                     success: (response) => {
-                        if (response.auth === true) {
+                        if (response.auth === true) { //Utente autenticato
                             
-                            $.getJSON("/getStudenti/"+response.username, (iscrizioni)=>{
+                            //GET Ajax all'url offerto da server_client per l'ottenimento delle informazioni sullo studente
+                            $.getJSON("/getStudenti/"+response.username, (iscrizioni)=>{ //sfruttiamo l'username che ci viene dato in risposta dalla rotta precedente
 
-                                iscrizioni.forEach((iscrizione)=>{
+                                iscrizioni.forEach((iscrizione)=>{ //per ogni studente (in questo caso uno) crea i vari oggetti html e mostra le informazioni
+
                                     var $infonome = $("<li class='infostudente'>").text(iscrizione.nome+" "+iscrizione.cognome);
                                     var $labeldata = $("<li class='labelstudente'>").text("Data di nascita: ");
                                     var $infodata = $("<li class='infostudente'>").text(iscrizione.datanascita);
@@ -56,15 +54,15 @@ var main=function(){
                                     $cont.append($infonome).append($labeldata).append($infodata).append($labelemail).append($infoemail).append($labelcellulare).append($infocellulare).append($labelcorso).append($infocorso).append($labelpatenti).append($infopatenti);
                                 })
 
-                            }).fail((jqXHR)=>{
+                            }).fail((jqXHR)=>{ //Gestione dell'errore nella chiamata Ajax
                                 $cont.append($("<li class='errorstudente'>").text("Nessun studente trovato!"));
                             })
 
                         }
-                        else {
-                            window.alert("L'utente deve fare il log-in");
+                        else { //Utente non autenticato, reindirizza alla pagina di login.
                             
-                            // Navigate to login page
+                            window.alert("L'utente deve fare il log-in");
+
                             window.location.href = "/login";
                         }
 
@@ -75,46 +73,65 @@ var main=function(){
                 $("main .content").append($cont);
                 
 
-                
-
-            }else if($element.parent().is(":nth-child(2)")){ //VISUALIZZA CORSI
+            //TAB 2: VISUALIZZA CORSI
+            }else if($element.parent().is(":nth-child(2)")){
 
                 $cont = $("<ul>");
-                
-                //GET Ajax all'url offerto da server_client per l'ottenimento dei corsi
-                $.getJSON("/getCorsi", (corsi)=>{
 
-                    corsi.forEach((corso)=>{
-
-                        var $listidcorso = $("<li class='listidcorso'>").text("ID: "+corso.id);
-                        var $infocorso = $("<li class='infocorso'>").text("Patente: "+corso.patente+" - Info: "+corso.descrizione);
-
-                        $cont.append($listidcorso).append($infocorso);
-                    
-
-                    })
-                    
-                }).fail((jqXHR)=>{
-                    $cont.append($("<li class='errorcorsi'>").text("Nessun corso trovato!"));
-                })
-
-                //Append elementi html al content
-                $("main .content").append($cont);
-
-            
-
-            }else if($element.parent().is(":nth-child(3)")){//TAB SIMULAZIONE DOMANDE
-
-                $cont=$("<ul>");
-
+                //Controllo Autenticazione Utente
                 $.ajax({
                     method: "GET",
                     url: "/autenticazioneAvvenuta",
                     dataType: "json",
                     success: (response) => {
-                        if (response.auth === true){
+                        if (response.auth === true) { //Utente autenticato
 
-                            //GET per ottenere l'array di domande
+                            //GET Ajax all'url offerto da server_client per l'ottenimento dei corsi
+                            $.getJSON("/getCorsi", (corsi)=>{
+
+                                corsi.forEach((corso)=>{ //Per ogni corso mostro l'id e le informazioni
+
+                                    var $listidcorso = $("<li class='listidcorso'>").text("ID: "+corso.id);
+                                    var $infocorso = $("<li class='infocorso'>").text("Patente: "+corso.patente+" - Info: "+corso.descrizione);
+
+                                    $cont.append($listidcorso).append($infocorso);
+                                
+
+                                })
+                                
+                            }).fail((jqXHR)=>{
+                                $cont.append($("<li class='errorcorsi'>").text("Nessun corso trovato!"));
+                            })
+
+                        }else { //Utente non autenticato, reindirizza alla pagina di login.
+                            
+                            window.alert("L'utente deve fare il log-in");
+
+                            window.location.href = "/login";
+                        }
+                
+                    }
+                
+                });
+                
+                //Append elementi html al content
+                $("main .content").append($cont);
+
+            
+            //TAB 3: SIMULAZIONE DOMANDE
+            }else if($element.parent().is(":nth-child(3)")){
+
+                $cont=$("<ul>");
+
+                //Controllo Autenticazione Utente
+                $.ajax({
+                    method: "GET",
+                    url: "/autenticazioneAvvenuta",
+                    dataType: "json",
+                    success: (response) => {
+                        if (response.auth === true){//Utente autenticato
+
+                            //GET per ottenere l'array di 40 domande scelte casualmente
                             $.getJSON("/getDomande", (domande)=>{
                                 var i=0;
                                 //Scorro l'array di domande
@@ -122,24 +139,24 @@ var main=function(){
 
                                     //div con display flex per lo spazio tra i bottoni
                                     var $div = $("<div class='d-flex gap-2'>")
-                                    //Richiesta della domanda
+                                    //Richiesta della domanda + numero domande
                                     var $domric = $("<li class='domrichiesta'> <br />").text("Domanda "+ ++i +": ")
                                     var $richiesta = $("<li class='richiesta'>").text(domanda.domanda);
-                                    if(domanda.risposta == "vero"){
-                                    
+                                    if(domanda.risposta == "vero"){ //se la risposta alla domanda è "vero"
+                                        //Creo il bottone vero con valore corretto
+
                                         var $vero = $("<input type='checkbox' name='vero"+i+"' value='corretta' /> Vero <br />");
                                         var $falso = $("<input type='checkbox' name='falso"+i+"' value='sbagliata' /> Falso <br />");
                                     
-                                    }else{
+                                    }else{ //se invece è "falso"
+                                        //Creo il bottone falso con valore corretto
 
                                         var $vero = $("<input type='checkbox' name='vero"+i+"' value='sbagliata' /> Vero <br />");
                                         var $falso = $("<input type='checkbox' name='falso"+i+"' value='corretta' /> Falso <br />");
 
                                     }
 
-                                    
-
-                                    //Appendo
+                                    //Appendo i nuovi oggetti al contenuto
                                     $cont.append($domric).append($richiesta).append($vero).append($falso);
 
                                 });
@@ -147,19 +164,23 @@ var main=function(){
                                 var $bottonefine = $("<button class='fine'>").text("Consegna Test");
                                 $cont.append($bottonefine);
 
+                                //Counter per mostrare il risultato della simulazione
                                 var counterCorrette = 0;
                                 var counterErrate = 0;
 
                                 document.querySelectorAll('button.fine').forEach((bottone)=>{
 
+                                    //aggiungo un listener al click del bottone di consegna
                                     bottone.addEventListener("click", (e)=>{
 
+                                        //Raccolgo i valori delle checkbox selezionate
                                         var valoriCheckbox = [];
                                             $("input[type=checkbox]:checked").each(function() {
                                                 valoriCheckbox.push($(this).val());
                                             });
                                             console.log("Valori Checkbox selezionati: " + valoriCheckbox.join(", "));
 
+                                            //Conto le risposte corrette e quelle errate
                                             valoriCheckbox.forEach(function(risp){
                                                 if(risp=="corretta"){
                                                     counterCorrette++;
@@ -168,14 +189,15 @@ var main=function(){
                                                 }
                                             });
 
+                                        //Verifico che siano state risposte tutte le domande
                                         if(counterCorrette+counterErrate >= 40){
-
+                                            //Mostro il numero di domande corrette e errate
                                             var $labelcountercorr = $("<li class='countercorrette'>").text("Numero domande corrette: "+counterCorrette);
                                             var $labelcountererr = $("<li class='countererrate'>").text("Numero domande errate: "+counterErrate);
                                             $cont.append($labelcountercorr).append($labelcountererr);
 
                                         }else{
-
+                                            // Messaggio di errore se non sono state risposte abbastanza domande
                                             $cont.append($("<li class='errorquiz'>").text("Devi rispondere a tutte le domande!")).hide().fadeIn(1500).fadeOut(2000);
 
                                         }
@@ -184,22 +206,16 @@ var main=function(){
 
                                 });
 
-                                
-
 
                             }).fail((jqXHR)=>{
                                 //Fail nella ricerca delle domande -> messaggio di errore
                                 $cont.append($("<li class='errorquiz'>").text("Non sono state trovate domande del quiz!")).hide().fadeIn(1500).fadeOut(2000);
                             });
 
-
-
-
-                        }else{
+                        }else{//Utente non autenticato, reindirizza alla pagina di login.
 
                             window.alert("L'utente deve fare il log-in");
                             
-                            //Vai alla finestra di login
                             window.location.href = "/login";
                         }
 
@@ -209,18 +225,18 @@ var main=function(){
 
                 $("main .content").append($cont);
 
-
-                
-            }else if($element.parent().is(":nth-child(4)")){ //VISUALIZZA ISTRUTTORI
+            //TAB 4: VISUALIZZA ISTRUTTORI
+            }else if($element.parent().is(":nth-child(4)")){
 
                 $cont=$("<ul>");
 
+                //Controllo Autenticazione Utente
                 $.ajax({
                     method: "GET",
                     url: "/autenticazioneAvvenuta",
                     dataType: "json",
                     success: (response) => {
-                        if (response.auth === true){
+                        if (response.auth === true){ //Utente autorizzato
 
                             //GET per ottenere l'array di istruttori
                             $.getJSON("/getIstruttori", (istruttori)=>{
@@ -228,6 +244,7 @@ var main=function(){
                                 //Scorro l'array di istruttori
                                 istruttori.forEach((istruttore)=>{
 
+                                    //Mostro gli ID e le informazioni relative a tale utente
                                     var $listidistr = $("<li class='listidistruttore'>").text("ID: "+istruttore.id);
                                     var $infoistr = $("<li class='infoistruttore'>").text(istruttore.nome+" "+istruttore.cognome+" - Cellulare: "+istruttore.cellulare+" - Email: "+istruttore.email);
 
@@ -240,30 +257,30 @@ var main=function(){
                                 $cont.append($("<li class='erroristruttori'>").text("Nessun istruttore trovato!"));
                             })
 
-                        }else{
+                        }else{//Utente non autenticato, reindirizza alla pagina di login.
 
                             window.alert("L'utente deve fare il log-in");
                             
-                            //Vai alla finestra di login
                             window.location.href = "/login";
                         }
                     }
                 
                 });
 
-
                 $("main .content").append($cont);
 
-            }else if($element.parent().is(":nth-child(5)")){//PRENOTAZIONE LEZIONI
+            //TAB 5: PRENOTAZIONE LEZIONI
+            }else if($element.parent().is(":nth-child(5)")){
 
                 $cont=$("<div>");
 
+                //Controllo Autenticazione Utente
                 $.ajax({
                     method: "GET",
                     url: "/autenticazioneAvvenuta",
                     dataType: "json",
                     success: (response) => {
-                        if (response.auth === true){
+                        if (response.auth === true){ //Utente autorizzato
                             
                             //Label e input box per i campi da riempire
 
@@ -313,7 +330,8 @@ var main=function(){
 
 
                             });
-            
+                            
+                            //Sposto il focus dei vari input al cliccare del tasto Enter
                             $inputistruttore.on("keypress",function(event){
                                 if(event.key=="Enter")
                                 $inputdata.focus();
@@ -332,11 +350,10 @@ var main=function(){
                             //append degli elemnti html
                             $cont.append($labelistruttore).append($inputistruttore).append($labeldata).append($inputdata).append($labelorario).append($inputorario).append($buttonprenota);
                         
-                        }else{
+                        }else{//Utente non autenticato, reindirizza alla pagina di login.
 
                             window.alert("L'utente deve fare il log-in");
                             
-                            //Vai alla finestra di login
                             window.location.href = "/login";
                         }
                     }
@@ -344,20 +361,22 @@ var main=function(){
                 
                 $("main .content").append($cont);
 
-            }else if($element.parent().is(":nth-child(6)")){//GESTISCI PRENOTAZIONI
+            //TAB 6: GESTISCI PRENOTAZIONI
+            }else if($element.parent().is(":nth-child(6)")){
 
                 //Lo studente può visualizzare le proprie prenotazioni e nel caso eliminarle
 
                 $cont=$("<ul>");
 
+                //Controllo Autenticazione Utente
                 $.ajax({
                     method: "GET",
                     url: "/autenticazioneAvvenuta",
                     dataType: "json",
                     success: (response) => {
-                        if (response.auth === true){
+                        if (response.auth === true){//Utente autorizzato
 
-                            //GET per ottenere l'array di prenotazioni
+                            //GET per ottenere l'array di prenotazioni relative allo username specifico
                             $.getJSON("/getPrenotazioni/"+response.username, (prenotazioni)=>{
 
                                 //Scorro l'array di prenotazioni
@@ -413,9 +432,14 @@ var main=function(){
                                 $cont.append($("<li class='error'>").text("Non sono state trovate prenotazioni!")).hide().fadeIn(800).fadeOut(3000);
                             });
 
-                                    }
-                                }
-                            });
+                        }else{//Utente non autenticato, reindirizza alla pagina di login.
+
+                            window.alert("L'utente deve fare il log-in");
+                            
+                            window.location.href = "/login";
+                        }
+                    }
+                });
                 
 
                 $("main .content").append($cont);
@@ -423,17 +447,14 @@ var main=function(){
 
             }
             
-            return false;
+            return false;//Evita la ripropagazione del click sui tabs
 
         })
     });
 
-    $(".tabs a:first-child span").trigger("click");
+    $(".tabs a:first-child span").trigger("click");//Trigger per settare il tab di default (AREA PERSONALE) quando viene aperta la pagina
     
 }
-
-
-
 
 
 //Quando il documento si è caricato
