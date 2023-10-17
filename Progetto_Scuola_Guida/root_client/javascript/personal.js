@@ -34,11 +34,10 @@ var main=function(){
                     success: (response) => {
                         if (response.auth === true) { //Utente autenticato
                             
-                            //GET Ajax all'url offerto da server_client per l'ottenimento delle informazioni sullo studente
-                            $.getJSON("/getStudenti/"+response.username, (iscrizioni)=>{ //sfruttiamo l'username che ci viene dato in risposta dalla rotta precedente
+                            $.getJSON("/getStudenti/"+response.username, (iscrizioni)=>{ //C'è un'iscrizione per questo studente?
 
-                                iscrizioni.forEach((iscrizione)=>{ //per ogni studente (in questo caso uno) crea i vari oggetti html e mostra le informazioni
-
+                                //Sì, eccola
+                                iscrizioni.forEach((iscrizione)=>{
                                     var $infonome = $("<li class='infostudente'>").text(iscrizione.nome+" "+iscrizione.cognome);
                                     var $labeldata = $("<li class='labelstudente'>").text("Data di nascita: ");
                                     var $infodata = $("<li class='infostudente'>").text(iscrizione.datanascita);
@@ -54,7 +53,8 @@ var main=function(){
                                     $cont.append($infonome).append($labeldata).append($infodata).append($labelemail).append($infoemail).append($labelcellulare).append($infocellulare).append($labelcorso).append($infocorso).append($labelpatenti).append($infopatenti);
                                 })
 
-                            }).fail((jqXHR)=>{ //Gestione dell'errore nella chiamata Ajax
+                            }).fail((jqXHR)=>{
+                                //No, o almeno non è stata trovata
                                 $cont.append($("<li class='errorstudente'>").text("Nessun studente trovato!"));
                             })
 
@@ -77,8 +77,33 @@ var main=function(){
             }else if($element.parent().is(":nth-child(2)")){
 
                 $cont = $("<ul>");
+                
+                //GET Ajax all'url offerto da server_client per l'ottenimento dei corsi
+                $.getJSON("/getCorsi", (corsi)=>{
 
-                //Controllo Autenticazione Utente
+                    corsi.forEach((corso)=>{ //Per ogni corso creo una label e stampo le informazioni ad esso correlate
+
+                        var $listidcorso = $("<li class='listidcorso'>").text("ID: "+corso.id);
+                        var $infocorso = $("<li class='infocorso'>").text("Patente: "+corso.patente+" - Info: "+corso.descrizione);
+
+                        $cont.append($listidcorso).append($infocorso);
+
+                    })
+                    
+                }).fail((jqXHR)=>{
+                    $cont.append($("<li class='errorcorsi'>").text("Nessun corso trovato!"));
+                })
+
+                //Append elementi html al content
+                $("main .content").append($cont);
+
+            
+
+            }else if($element.parent().is(":nth-child(3)")){//TAB SIMULAZIONE DOMANDE
+
+                $cont=$("<ul>");
+
+                //Chiamata AJAX - GET per raccogliere le domande
                 $.ajax({
                     method: "GET",
                     url: "/autenticazioneAvvenuta",
@@ -142,17 +167,18 @@ var main=function(){
                                     //Richiesta della domanda + numero domande
                                     var $domric = $("<li class='domrichiesta'> <br />").text("Domanda "+ ++i +": ")
                                     var $richiesta = $("<li class='richiesta'>").text(domanda.domanda);
-                                    if(domanda.risposta == "vero"){ //se la risposta alla domanda è "vero"
-                                        //Creo il bottone vero con valore corretto
 
-                                        var $vero = $("<input type='checkbox' name='vero"+i+"' value='corretta' /> Vero <br />");
-                                        var $falso = $("<input type='checkbox' name='falso"+i+"' value='sbagliata' /> Falso <br />");
+                                    if(domanda.risposta == "vero"){ 
+                                        
+                                        //Se la risposta alla domanda è vero
+                                        var $vero = $("<input type='checkbox' name='vero"+i+"' value='corretta' /> Vero <br />"); //vero sarà la risposta corretta
+                                        var $falso = $("<input type='checkbox' name='falso"+i+"' value='sbagliata' /> Falso <br />"); //falso sarà la risposta sbagliata
                                     
-                                    }else{ //se invece è "falso"
-                                        //Creo il bottone falso con valore corretto
+                                    }else{ 
 
-                                        var $vero = $("<input type='checkbox' name='vero"+i+"' value='sbagliata' /> Vero <br />");
-                                        var $falso = $("<input type='checkbox' name='falso"+i+"' value='corretta' /> Falso <br />");
+                                        //Se la risposta alla domanda è falso
+                                        var $vero = $("<input type='checkbox' name='vero"+i+"' value='sbagliata' /> Vero <br />"); //vero sarà la riposta sbagliata
+                                        var $falso = $("<input type='checkbox' name='falso"+i+"' value='corretta' /> Falso <br />"); //falso sarà la risposta corretta
 
                                     }
 
@@ -161,10 +187,11 @@ var main=function(){
 
                                 });
 
+                                //Dopo aver risposto a tutte le domande clicco il bottone di consegna
                                 var $bottonefine = $("<button class='fine'>").text("Consegna Test");
                                 $cont.append($bottonefine);
 
-                                //Counter per mostrare il risultato della simulazione
+                                //inizializzo i counter delle risposte corrette ed errate
                                 var counterCorrette = 0;
                                 var counterErrate = 0;
 
@@ -178,7 +205,7 @@ var main=function(){
                                             $("input[type=checkbox]:checked").each(function() {
                                                 valoriCheckbox.push($(this).val());
                                             });
-                                            console.log("Valori Checkbox selezionati: " + valoriCheckbox.join(", "));
+                                            console.log("Valori Checkbox selezionati: " + valoriCheckbox.join(", ")); //debug
 
                                             //Conto le risposte corrette e quelle errate
                                             valoriCheckbox.forEach(function(risp){

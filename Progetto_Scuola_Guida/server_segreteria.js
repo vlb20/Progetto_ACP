@@ -94,7 +94,7 @@ var Studente=studenti.model("Studente",studentiScheme);
 var Corso=corsi.model("Corso",corsiScheme);
 var Istruttore=istruttori.model("Istruttore",istruttoriScheme);
 
-//Creiamo il vettore degli studenti iscritti
+//Creiamo il vettore degli studenti iscritti e dei corsi
 var idcorso=0;
 var idistruttore=0;
 
